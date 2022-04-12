@@ -1,16 +1,17 @@
 package mars.mips.SO.ProcessManager;
+
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Scheduler {
 
-    private static Queue<PCB> procProntos = new PriorityQueue<PCB>();
+    private static Queue<PCB> fila = new PriorityQueue<PCB>();
     
-    public void escalonar(PCB novoPCB){
-        
-        procProntos.remove();
-        procProntos.add(novoPCB);
-
+    public static void escalonar(){
+        ProcessesTable.setProcessoExecutando(fila.remove());    
     }
 
+    public static void adicionarNaFila(PCB novoPCB){
+        fila.add(novoPCB);
+    }
 }
