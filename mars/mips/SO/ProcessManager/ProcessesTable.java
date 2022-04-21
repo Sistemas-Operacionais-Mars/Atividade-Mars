@@ -5,7 +5,7 @@ import java.util.List;
 public class ProcessesTable {
     private static List<PCB> ProcessosProntos = new ArrayList<PCB>();
     private static PCB processoExecutando;
-    
+
     public static void criarProcesso(int enderecoInicio){
         PCB novoProcesso = new PCB(enderecoInicio);
         ProcessosProntos.add(novoProcesso);
@@ -17,6 +17,9 @@ public class ProcessesTable {
     }
 
     public static void setProcessoExecutando(PCB pcb) {
+        processoExecutando.setEstadoProcesso("Pronto");
+        ProcessosProntos.add(processoExecutando);
+
         processoExecutando = pcb;
         processoExecutando.setEstadoProcesso("Executando");
     }

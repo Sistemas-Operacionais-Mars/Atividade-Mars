@@ -2,6 +2,9 @@ package mars.mips.instructions.syscalls;
 
 import mars.ProcessingException;
 import mars.ProgramStatement;
+import mars.mips.SO.ProcessManager.PCB;
+import mars.mips.SO.ProcessManager.ProcessesTable;
+import mars.mips.SO.ProcessManager.Scheduler;
 
 public class SyscallProcessChange extends AbstractSyscall {
     public SyscallProcessChange() {
@@ -10,7 +13,11 @@ public class SyscallProcessChange extends AbstractSyscall {
 
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
-    
+        PCB processoExecutando = ProcessesTable.getProcessoExecutando();
+        processoExecutando.copiarRegistradoresParaPCB();
+
+        Scheduler.escalonar();
+        processoExecutando.copiarPCBparaRegistradores();
     }
     
 }
