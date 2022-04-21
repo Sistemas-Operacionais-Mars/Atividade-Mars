@@ -17,11 +17,19 @@ public class ProcessesTable {
     }
 
     public static void setProcessoExecutando(PCB pcb) {
-        processoExecutando.setEstadoProcesso("Pronto");
-        ProcessosProntos.add(processoExecutando);
-
+        pcb.setEstadoProcesso("Executando");
         processoExecutando = pcb;
-        processoExecutando.setEstadoProcesso("Executando");
     }
 
+    public static void adicionarProcessoPronto(PCB pcb) {
+        if(!pcb.getEstadoProcesso().equals("Pronto")) {
+            pcb.setEstadoProcesso("Pronto");
+        }
+
+        ProcessosProntos.add(pcb);
+    }
+
+    public static void removerProcessoPronto(PCB pcb) {
+        ProcessosProntos.remove(pcb);
+    }
 }

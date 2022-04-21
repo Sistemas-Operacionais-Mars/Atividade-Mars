@@ -8,6 +8,9 @@ public class Scheduler {
     private static Queue<PCB> fila = new PriorityQueue<PCB>();
     
     public static void escalonar(){
+        PCB processoExecutando = ProcessesTable.getProcessoExecutando();
+
+        ProcessesTable.adicionarProcessoPronto(processoExecutando);
         ProcessesTable.setProcessoExecutando(fila.remove());    
     }
 
