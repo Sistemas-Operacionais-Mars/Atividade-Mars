@@ -1,12 +1,8 @@
 #Syscall de impressão de string
-
-.macro SyscallPrintString (%texto_param)
-    .data
-        texto: .asciiz %texto_param
-    .text
-        li $v0, 4
-        la $a0, texto
-        syscall
+.macro SyscallPrintString(%texto)
+    li $v0, 4
+    la $a0, %texto
+    syscall
 .end_macro
 
 #Syscalls de fim de programa
@@ -24,16 +20,18 @@
 
 #Syscalls criadas no trabalho
 
-.macro SyscallFork (%valor_para_a0)
-    li $a0, %valor_para_a0
-	li $v0, 17
+.macro SyscallFork(%endereco) 
+    li $v0,60
+    la $a0, %endereco
 	syscall
 .end_macro
 
-.macro SycallProcessChange
-
+.macro SyscallProcessChange
+    li $v0,61
+	syscall
 .end_macro
 
-.macro SycallProcessTerminate
-
+.macro SyscallProcessTerminate
+    li $v0,62
+	syscall
 .end_macro
