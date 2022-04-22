@@ -5,8 +5,6 @@
     syscall
 .end_macro
 
-#Syscalls de fim de programa
-
 .macro SyscallExit
 	li $v0,10
 	syscall
