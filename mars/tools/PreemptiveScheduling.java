@@ -1,9 +1,21 @@
 package mars.tools;
 import javax.swing.*;
+
+import javafx.event.ActionEvent;
+import mars.mips.SO.ProcessManager.ProcessesTable;
+import mars.mips.SO.ProcessManager.Scheduler;
+
 import java.awt.*;
 import java.awt.event.*;
 import mars.*;
+import java.util.Observable;
+import mars.util.SystemIO;
 
+
+
+import mars.mips.hardware.AccessNotice;
+import mars.mips.hardware.Memory;
+import mars.mips.hardware.MemoryAccessNotice;
  
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -33,11 +45,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
 */
 
+@SuppressWarnings("serial")
 public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
     
    private static String heading =  "Escalonamento preemptivo";
    private static String version = " Version 1.0";
-   
+   public static boolean canExec = true;
+
     /** 
      * Simple constructor, likely used to run a stand-alone memory reference visualizer.
      * @param title String containing title for title bar
@@ -62,7 +76,7 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
      * is no driver program to invoke the application.
      */
     public static void main(String[] args) {
-      new IntroToTools(heading+", "+version,heading).go();
+      new PreemptiveScheduling(heading+", "+version,heading).go();
    }
     
    // modifica para o nosso nome
@@ -74,83 +88,153 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
       return "Preemptive Scheduling";
    }
     
-   /**
-     *  Implementation of the inherited abstract method to build the main 
-     *  display area of the GUI.  It will be placed in the CENTER area of a 
-     *  BorderLayout.  The title is in the NORTH area, and the controls are 
-     *  in the SOUTH area.
+	protected int lastAddress = -1; // comparativo de endereço
+    /**
+     * Number of instructions executed until now.
      */
-    protected JComponent buildMainDisplayArea() {
-      JTextArea message = new JTextArea();
-      message.setEditable(false);
-      message.setLineWrap(true);
-      message.setWrapStyleWord(true);
-      message.setFont(new Font("Ariel",Font.PLAIN,12));
-      message.setText(
-           "Hello!  This Tool does not do anything but you may use its "+
-           "source code as a starting point to build your own MARS Tool "+
-           "or Application."+
-           "\n\n"+
-           "A MARS Tool is a program listed in the MARS Tools menu.  It is launched "+
-           "when you select its menu item and typically interacts with executing MIPS "+
-           "programs to do something exciting and informative or at least interesting."+
-           "\n\n"+
-           "A MARS Application is a stand-alone program for similarly interacting with "+
-           "executing MIPS programs.  It uses MARS' MIPS assembler and "+
-           "runtime simulator in the background to control MIPS execution."+
-           "\n\n"+
-           "The basic requirements for building a MARS Tool are:"+
-           "\n"+
-           "  1. It must be a class that implements the MarsTool interface.  "+
-           "This has only two methods: 'String getName()' to return the "+
-           "name to be displayed in its Tools menu item, and "+
-           "'void action()' which is invoked when that menu item "+
-           "is selected by the MARS user."+
-           "\n"+
-           "  2. It must be stored in the mars.tools package (in folder "+
-           "mars/tools)"+
-           "\n"+
-           "  3. It must be successfully compiled in that package.  This "+
-           "normally means the MARS distribution needs to be extracted from the "+
-           "JAR file before you can develop your Tool."+
-           "\n\n"+
-           "If these requirements are met, MARS will recognize and load "+
-           "your Tool into its Tools menu the next time it runs."+
-           "\n\n"+
-           "There are no fixed requirements for building a MARS Application, a "+
-           "stand-alone program that utilizes the MARS API."+
-           "\n\n"+
-           "You can build a program that may be run as either a MARS Tool or an Application.  "+
-           "The easiest way is to extend an abstract class provided in the MARS distribution: "+
-           "mars.tools.AbstractMarsToolAndApplication.  "+
-           "\n"+
-           "  1. It defines a suite of methods and provides default definitions for "+
-           "all but two: getName() and buildMainDisplayArea()."+
-           "\n"+
-           "  2.  String getName() was introduced above."+
-           "\n"+
-           "  3.  JComponent buildMainDisplayArea() returns the JComponent to be placed in the "+
-           "BorderLayout.CENTER region of the tool/app's user interface.  The NORTH and "+
-           "SOUTH are defined to contain a heading and a set of button controls, respectively.  "+
-           "\n"+
-           "  4. It defines a default 'void go()' method to launch the application."+
-           "\n"+
-           "  5. Conventional usage is to define your application as a subclass then launch it "+
-           "by invoking its go() method."+
-           "\n\n"+
-           "The frame/dialog you are reading right now is an example of an "+
-           "AbstractMarsToolAndApplication subclass.  If you run it as an application, you "+
-           "will notice the set of controls at the bottom of the window differ from those "+
-           "you get when running it from MARS' Tools menu.  It includes additional controls "+
-           "to load and control the execution of pre-existing MIPS programs."+
-           "\n\n"+
-           "See the mars.tools.AbstractMarsToolAndApplication API or the source code of "+
-           "existing tool/apps for further information."+
-           "\n"
-         );
-             message.setCaretPosition(0); // Assure first line is visible and at top of scroll pane.
-      return new JScrollPane(message);
-   }
-    
-}
+	protected int counter = 0;
+	private JTextField counterField;
+	/**
+     * Timer definition.
+     */
+	protected int countTimer = 10; // Timer de interrupção
+	/**
+     * Number of interruptions until now.
+     */
+	protected int countInter = 0; // contador de interrupções
+	private JTextField counterInterField;
+    /**
+     * Number of instructions until interruption.
+     */
+    protected int countInst = 3;
+	private JProgressBar progressbarInst;
+	
+	/**
+	 * Configuration tools
+	*/
+	private JToggleButton timerOn;
+	private JSpinner timerConfig;	
 
+	@Override
+	protected JComponent buildMainDisplayArea() {
+		JPanel panel = new JPanel(new GridBagLayout());
+
+		counterField = new JTextField("0", 10);
+		counterField.setEditable(false);
+		
+		counterInterField = new JTextField("0", 10);
+		counterInterField.setEditable(false);
+		
+		progressbarInst = new JProgressBar(JProgressBar.HORIZONTAL);
+		progressbarInst.setStringPainted(true);
+
+		timerOn = new JToggleButton("ON/OFF"); 
+		timerOn.setToolTipText("Enable interruption");
+		
+		timerConfig = new JSpinner();
+		timerConfig.setModel(new SpinnerNumberModel(10, 2, 100, 1));
+		timerConfig.setToolTipText("Sets the time for the interruption");
+		
+		// Add them to the panel
+		
+		// Fields
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.LINE_START;
+		c.gridheight = c.gridwidth = 1;
+		c.gridx = 3;
+		c.gridy = 1;
+		c.insets = new Insets(0, 0, 17, 0);
+		panel.add(counterField, c);
+
+		c.insets = new Insets(0, 0, 0, 0);
+		c.gridy++;
+		panel.add(counterInterField, c);
+		
+		// progress bar
+		c.gridy++;
+		panel.add(progressbarInst,c);
+		// spinner
+		c.gridy++;
+		panel.add(timerConfig, c);
+		
+		// Labels
+		c.anchor = GridBagConstraints.LINE_END;
+		c.gridx = 1;
+		c.gridwidth = 2;
+		c.gridy = 1;
+		c.insets = new Insets(0, 0, 17, 0);
+		panel.add(new JLabel("Instructions so far: "), c);
+		
+		c.insets = new Insets(0, 0, 0, 0);
+		c.gridx = 2;
+		c.gridwidth = 1;
+		c.gridy++;
+		panel.add(new JLabel("Interruptions so far: "), c);
+		c.gridy++;
+		panel.add(new JLabel("Time so far: "), c);
+		c.gridy++;
+		panel.add(new JLabel("Timer: "), c);
+		
+		// lock
+		c.insets = new Insets(3, 3, 3, 3);
+		c.gridx = 4;
+		c.gridy = 2;
+		panel.add(timerOn, c);
+		
+   		return panel;
+	}
+	
+//	@Override
+	protected void addAsObserver() {
+		addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
+	}
+	
+//  @Override
+	protected void processMIPSUpdate(Observable memory, AccessNotice notice) {
+		canExec = true;
+		if (notice.getAccessType() != AccessNotice.READ) return;
+		MemoryAccessNotice m = (MemoryAccessNotice) notice;
+		int a = m.getAddress();
+		if (a == lastAddress) return;
+		if (ProcessesTable.getProcessoExecutando() != null) {
+			lastAddress = a;
+			++counter;
+			if(timerOn.isSelected()) {
+				++countInst;
+				if (countInst > (int)timerConfig.getValue()) {
+					canExec = false;
+					SystemIO.printString("-- Hora de trocar!\n");
+					++countInter; // incrementa interrupções
+					countInst = 0; // zera o progressBar				
+				//ProcessesTable.setProcessoExecutando("roteamento");  // aqui era processChange
+        Scheduler.escalonar(); // vai ser esse?
+				}
+			}
+			updateDisplay();
+		}
+	}
+	
+//  @Override
+	protected void initializePreGUI() {
+		countInst = 0;
+		countTimer = 10;
+		countInter = 0;
+		lastAddress = -1;
+	}
+	
+//  @Override
+	protected void reset() {
+		countInst = 0;
+		countTimer = 10;
+		countInter = 0;
+		lastAddress = -1;		
+		updateDisplay();
+	}
+//  @Override
+	protected void updateDisplay() {
+		counterField.setText(String.valueOf(counter));
+		counterInterField.setText(String.valueOf(countInter));
+		progressbarInst.setValue(countInst);
+		progressbarInst.setMaximum((int)timerConfig.getValue());
+	}
+}
