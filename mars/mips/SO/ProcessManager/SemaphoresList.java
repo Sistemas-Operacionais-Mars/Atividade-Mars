@@ -2,7 +2,7 @@ package mars.mips.SO.ProcessManager;
 
 import java.util.List;
 
-public class SemaphoreList {
+public class SemaphoresList {
     private static List<Semaphore> semaforos;
 
     public static void criarSemaforo(int valor, int enderecoSemaforo) {

@@ -2,7 +2,7 @@ package mars.mips.instructions.syscalls;
 
 import mars.ProcessingException;
 import mars.ProgramStatement;
-import mars.mips.SO.ProcessManager.SemaphoreList;
+import mars.mips.SO.ProcessManager.SemaphoresList;
 import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.RegisterFile;
@@ -17,7 +17,7 @@ public class SyscallCreateSemaphore extends AbstractSyscall {
         int enderecoVariavel = RegisterFile.getValue(4);
         try {
             int valorVariavel = Memory.getInstance().get(enderecoVariavel, 4);
-            SemaphoreList.criarSemaforo(valorVariavel, enderecoVariavel);
+            SemaphoresList.criarSemaforo(valorVariavel, enderecoVariavel);
         } catch (AddressErrorException e) {
             e.printStackTrace();
         }

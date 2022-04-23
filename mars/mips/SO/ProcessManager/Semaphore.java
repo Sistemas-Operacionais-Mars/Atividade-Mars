@@ -27,9 +27,9 @@ public class Semaphore {
     public void decrementarValor() {
         if(valor > 0) --valor;
         else {
-            PCB processExecutando = ProcessesTable.getProcessoExecutando();
-            processExecutando.setEstadoProcesso("Bloqueado");
-            processosBloqueados.add(processExecutando);
+            PCB processoExecutando = ProcessesTable.getProcessoExecutando();
+            processoExecutando.setEstadoProcesso("Bloqueado");
+            processosBloqueados.add(processoExecutando);
 
             Scheduler.escalonar();
         }
