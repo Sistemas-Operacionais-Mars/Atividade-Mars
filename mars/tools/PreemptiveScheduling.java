@@ -1,7 +1,6 @@
 package mars.tools;
 import javax.swing.*;
 
-import javafx.event.ActionEvent;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.SO.ProcessManager.Scheduler;
 
