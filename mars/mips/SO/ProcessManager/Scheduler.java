@@ -10,7 +10,10 @@ public class Scheduler {
     public static void escalonar(){
         PCB processoExecutando = ProcessesTable.getProcessoExecutando();
 
-        ProcessesTable.adicionarProcessoPronto(processoExecutando);
+        if(!processoExecutando.getEstadoProcesso().equals("Bloqueado")) {
+            ProcessesTable.adicionarProcessoPronto(processoExecutando);
+        }
+
         ProcessesTable.setProcessoExecutando(fila.remove());    
     }
 
