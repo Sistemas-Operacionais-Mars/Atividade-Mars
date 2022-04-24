@@ -195,7 +195,7 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		MemoryAccessNotice m = (MemoryAccessNotice) notice;
 		int a = m.getAddress();
 		if (a == lastAddress) return;
-		if (ProcessesTable.getProcessoExecutando() != null) {
+		if (ProcessesTable.getProcessoTopo() != null) {
 			lastAddress = a;
 			++counter;
 			if(timerOn.isSelected()) {

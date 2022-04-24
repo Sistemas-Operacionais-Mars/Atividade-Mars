@@ -1,35 +1,35 @@
 package mars.mips.SO.ProcessManager;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class ProcessesTable {
-    private static List<PCB> ProcessosProntos = new ArrayList<PCB>();
-    private static PCB processoExecutando;
+    private static Queue<PCB> filaProcessos = new LinkedList<PCB>();
+
+    public static void adicionarProcesso(PCB processo) {
+        if(filaProcessos.size() == 0) {
+            processo.setEstadoProcesso("Executando");
+        } else processo.setEstadoProcesso("Pronto");
+
+        filaProcessos.add(processo);
+    }
 
     public static void criarProcesso(int enderecoInicio){
         PCB novoProcesso = new PCB(enderecoInicio);
-        ProcessosProntos.add(novoProcesso);
-        Scheduler.escalonar();
+        adicionarProcesso(novoProcesso);
     }
 
-    public static PCB getProcessoExecutando() {
-        return processoExecutando;
+    public static PCB getProcessoTopo() {
+        return filaProcessos.peek();
     }
 
-    public static void setProcessoExecutando(PCB pcb) {
-        pcb.setEstadoProcesso("Executando");
-        processoExecutando = pcb;
-    }
+    public static PCB removerProcessoTopo() {
+        PCB processoRemovido = filaProcessos.remove();
 
-    public static void adicionarProcessoPronto(PCB pcb) {
-        if(!pcb.getEstadoProcesso().equals("Pronto")) {
-            pcb.setEstadoProcesso("Pronto");
+        if(filaProcessos.size() != 0) {
+            PCB processoTopo = getProcessoTopo();
+            processoTopo.setEstadoProcesso("Executando");
         }
 
-        ProcessosProntos.add(pcb);
-    }
-
-    public static void removerProcessoPronto(PCB pcb) {
-        ProcessosProntos.remove(pcb);
+        return processoRemovido;
     }
 }

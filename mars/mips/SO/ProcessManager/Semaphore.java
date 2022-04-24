@@ -20,14 +20,14 @@ public class Semaphore {
     public void incrementarValor() {
         if(processosBloqueados.size() > 0) {
             PCB processoPronto = processosBloqueados.remove(0);
-            ProcessesTable.adicionarProcessoPronto(processoPronto);
+            ProcessesTable.adicionarProcesso(processoPronto);
         } else ++valor;
     }
 
     public void decrementarValor() {
         if(valor > 0) --valor;
         else {
-            PCB processoExecutando = ProcessesTable.getProcessoExecutando();
+            PCB processoExecutando = ProcessesTable.getProcessoTopo();
             processoExecutando.setEstadoProcesso("Bloqueado");
             processosBloqueados.add(processoExecutando);
 

@@ -8,9 +8,9 @@ public class PCB {
     private int PID;
     private String estadoProcesso;
     private int[] valorRegistros;
-    private final int numeroDeRegistradores = 34;
+    private static final int numeroDeRegistradores = 34;
 
-    public PCB( int enderecoInicio ){
+    public PCB(int enderecoInicio){
         valorRegistros = new int [ numeroDeRegistradores ];
         setEnderecoInicio( enderecoInicio );
         setEstadoProcesso( "Pronto" );
@@ -18,26 +18,17 @@ public class PCB {
     }
 
     public void copiarRegistradoresParaPCB(){
-
         for( int i = 0; i < numeroDeRegistradores; i++ ){
-            if( i >= 32 )
-                valorRegistros[i] = RegisterFile.getValue( i + 1 );
-            else
-                valorRegistros[i] = RegisterFile.getValue( i );
+            if( i >= 32 ) valorRegistros[i] = RegisterFile.getValue( i + 1 );
+            else valorRegistros[i] = RegisterFile.getValue( i );
         }
-
     }
 
     public void copiarPCBparaRegistradores(){
-
         for( int i = 0; i < numeroDeRegistradores; i++ ){
-            if (i >= 32) {
-                RegisterFile.updateRegister( i + 1, valorRegistros[i] );
-            } else {
-                RegisterFile.updateRegister( i, valorRegistros[i] );
-            }
+            if (i >= 32) RegisterFile.updateRegister( i + 1, valorRegistros[i] );
+            else RegisterFile.updateRegister( i, valorRegistros[i] );
         }
-
     }
 
     public int getNumeroDeRegistradores() {
