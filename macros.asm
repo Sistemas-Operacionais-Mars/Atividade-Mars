@@ -10,7 +10,7 @@
 	syscall
 .end_macro
 
-.macro SyscallExit2 (%valor_para_a0)
+.macro SyscallExit2(%valor_para_a0)
     la $a0, %valor_para_a0
 	li $v0, 17
 	syscall
