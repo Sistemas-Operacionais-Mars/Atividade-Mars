@@ -8,6 +8,7 @@ public class ProcessesTable {
     public static void adicionarProcesso(PCB processo) {
         if(filaProcessos.size() == 0) {
             processo.setEstadoProcesso("Executando");
+            processo.copiarPCBparaRegistradores();
         } else processo.setEstadoProcesso("Pronto");
 
         filaProcessos.add(processo);
@@ -28,6 +29,7 @@ public class ProcessesTable {
         if(filaProcessos.size() != 0) {
             PCB processoTopo = getProcessoTopo();
             processoTopo.setEstadoProcesso("Executando");
+            processoTopo.copiarPCBparaRegistradores();
         }
 
         return processoRemovido;

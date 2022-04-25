@@ -17,7 +17,5 @@ public class SyscallProcessChange extends AbstractSyscall {
         processoExecutando.copiarRegistradoresParaPCB();
 
         Scheduler.escalonar();
-        PCB novoProcessoExecutando = ProcessesTable.getProcessoTopo();
-        novoProcessoExecutando.copiarPCBparaRegistradores();
     }
 }
