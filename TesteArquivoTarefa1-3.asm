@@ -9,7 +9,10 @@ SyscallFork(Programa1)
 	#escalonando o primeiro processo
 SyscallProcessChange
 	
-Idle:					
+Idle:
+	loop:
+	SyscallProcessChange
+	j loop	
 
 Programa1:					
 		addi $s1, $zero, 1 # valor inicial do contador

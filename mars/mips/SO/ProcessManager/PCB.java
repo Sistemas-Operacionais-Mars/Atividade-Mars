@@ -3,7 +3,6 @@ import mars.mips.hardware.RegisterFile;
 import java.util.Random;
 
 public class PCB {
-    
     private int enderecoInicio;
     private int PID;
     private String estadoProcesso;
@@ -11,24 +10,30 @@ public class PCB {
     private static final int numeroDeRegistradores = 34;
 
     public PCB(int enderecoInicio){
-        valorRegistros = new int [ numeroDeRegistradores ];
-        setEnderecoInicio( enderecoInicio );
-        setEstadoProcesso( "Pronto" );
-        PID = new Random().nextInt( Integer.MAX_VALUE );
+        valorRegistros = new int[numeroDeRegistradores];
+        setEnderecoInicio(enderecoInicio);
+        setEstadoProcesso("Pronto");
+        PID = new Random().nextInt(Integer.MAX_VALUE);
     }
 
     public void copiarRegistradoresParaPCB(){
-        for( int i = 0; i < numeroDeRegistradores; i++ ){
-            if( i >= 32 ) valorRegistros[i] = RegisterFile.getValue( i + 1 );
-            else valorRegistros[i] = RegisterFile.getValue( i );
+        for(int i = 0; i < numeroDeRegistradores; i++){
+            if (i == 31) valorRegistros[i] = RegisterFile.getProgramCounter();
+            else if (i >= 32) valorRegistros[i] = RegisterFile.getValue(i+1);
+            else valorRegistros[i] = RegisterFile.getValue(i);
         }
     }
 
     public void copiarPCBparaRegistradores(){
-        for( int i = 0; i < numeroDeRegistradores; i++ ){
-            if (i >= 32) RegisterFile.updateRegister( i + 1, valorRegistros[i] );
-            else RegisterFile.updateRegister( i, valorRegistros[i] );
+        for(int i = 0; i < numeroDeRegistradores; i++) {
+            if(i == 31) continue;
+                
+            if (i >= 32) RegisterFile.updateRegister(i+1, valorRegistros[i]);
+            else RegisterFile.updateRegister(i, valorRegistros[i]);
         }
+
+        int pc = valorRegistros[31] == 0 ? enderecoInicio : valorRegistros[31];
+        RegisterFile.setProgramCounter(pc);
     }
 
     public int getNumeroDeRegistradores() {
@@ -39,7 +44,7 @@ public class PCB {
         return valorRegistros;
     }
 
-    public void setValorRegistros( int[] valorRegistros ) {
+    public void setValorRegistros(int[] valorRegistros) {
         this.valorRegistros = valorRegistros;
     }
 

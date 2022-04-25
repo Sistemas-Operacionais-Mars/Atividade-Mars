@@ -13,9 +13,14 @@ public class SyscallProcessChange extends AbstractSyscall {
 
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
-        PCB processoExecutando = ProcessesTable.getProcessoTopo();
-        processoExecutando.copiarRegistradoresParaPCB();
+        PCB processoTopo = ProcessesTable.getProcessoTopo();
 
-        Scheduler.escalonar();
+        if(!processoTopo.getEstadoProcesso().equals("Executando")) {
+            processoTopo.setEstadoProcesso("Executando");
+            processoTopo.copiarPCBparaRegistradores();
+        } else {
+            processoTopo.copiarRegistradoresParaPCB();
+            Scheduler.escalonar();
+        }
     }
 }

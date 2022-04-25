@@ -6,11 +6,7 @@ public class ProcessesTable {
     private static Queue<PCB> filaProcessos = new LinkedList<PCB>();
 
     public static void adicionarProcesso(PCB processo) {
-        if(filaProcessos.size() == 0) {
-            processo.setEstadoProcesso("Executando");
-            processo.copiarPCBparaRegistradores();
-        } else processo.setEstadoProcesso("Pronto");
-
+        processo.setEstadoProcesso("Pronto");
         filaProcessos.add(processo);
     }
 
@@ -28,6 +24,7 @@ public class ProcessesTable {
 
         if(filaProcessos.size() != 0) {
             PCB processoTopo = getProcessoTopo();
+            System.out.println(processoTopo.getEnderecoInicio());
             processoTopo.setEstadoProcesso("Executando");
             processoTopo.copiarPCBparaRegistradores();
         }
