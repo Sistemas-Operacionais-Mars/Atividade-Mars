@@ -112,8 +112,8 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 	 * Configuration tools
 	*/
 	private JToggleButton timerOn;
-	private JSpinner timerConfig;	
-
+	private JSpinner timerConfig;
+	
 	@Override
 	protected JComponent buildMainDisplayArea() {
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -188,8 +188,8 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
 	}
 	
-//  @Override
-	protected void processMIPSUpdate(Observable memory, AccessNotice notice) {
+//  @Override (Esse aqui é o antigo!!!!!)
+	/*protected void processMIPSUpdate(Observable memory, AccessNotice notice) {
 		canExec = true;
 		if (notice.getAccessType() != AccessNotice.READ) return;
 		MemoryAccessNotice m = (MemoryAccessNotice) notice;
@@ -211,6 +211,33 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 			}
 			updateDisplay();
 		}
+	}*/
+	
+	protected void processMIPSUpdate(Observable memory, AccessNotice notice){
+		if (!notice.accessIsFromMIPS()) return;
+		if (notice.getAccessType() != AccessNotice.READ) return;
+		
+		MemoryAccessNotice m = (MemoryAccessNotice) notice;
+		int a = m.getAddress();
+		if (a == lastAddress) return;
+		
+		//Verifica se existe um processo executando
+		if(ProcessesTable.getProcessoTopo() != null){
+			lastAddress = a;
+			counter++;
+
+			//Verifica se o timer está contando
+			if(timerOn.isSelected()){
+				countInst++;
+
+				//Verifica a quantidade de instruções ultrapassou o limite do timer
+				if(countInst > (int)timerConfig.getValue()){
+					countInter++; // incrementa qnt de interrupções
+					countInst = 0; //zera o contador de instruções
+				}	
+			}
+			updateDisplay();
+		}
 	}
 	
 //  @Override
@@ -226,7 +253,8 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		countInst = 0;
 		countTimer = 10;
 		countInter = 0;
-		lastAddress = -1;		
+		lastAddress = -1;
+		counter = 0;		
 		updateDisplay();
 	}
 //  @Override
