@@ -24,7 +24,6 @@ public class ProcessesTable {
 
         if(filaProcessos.size() != 0) {
             PCB processoTopo = getProcessoTopo();
-            System.out.println(processoTopo.getEnderecoInicio());
             processoTopo.setEstadoProcesso("Executando");
             processoTopo.copiarPCBparaRegistradores();
         }
