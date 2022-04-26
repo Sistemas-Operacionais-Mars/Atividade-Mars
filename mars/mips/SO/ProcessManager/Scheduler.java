@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
+import mars.mips.hardware.RegisterFile;
+
 public class Scheduler {
 	private String tipoEscalonamento;
 
@@ -25,10 +27,10 @@ public class Scheduler {
     public void escalonar(boolean encerrarProcesso) {
 		if(ProcessesTable.getTamanhoLista() == 0) return;
 		PCB processoAntigo = ProcessesTable.getProcessoExecutando();
-		
+
         switch (tipoEscalonamento) {
             case "FIFO": {
-				fifo();
+				fifo(processoAntigo);
 				break;
 			}
         
@@ -45,7 +47,8 @@ public class Scheduler {
 			default: System.out.println("Indo parar aqui");
 		}
 
-		if(processoAntigo != null) {
+		PCB processoExecutando = ProcessesTable.getProcessoTopo();
+		if(processoAntigo != processoExecutando) {
 			if(encerrarProcesso) ProcessesTable.removerProcesso(processoAntigo);
 			else {
 				processoAntigo.setEstadoProcesso("Pronto");
@@ -53,15 +56,16 @@ public class Scheduler {
 			}
 		}
 
-		PCB processoExecutando = ProcessesTable.getProcessoTopo();
 		processoExecutando.setEstadoProcesso("Executando");
         processoExecutando.copiarPCBparaRegistradores();
     }
 
 	// Funções FIFO.
-    private void fifo() {
-		PCB processoExecutando = ProcessesTable.removerProcessoTopo();
-		ProcessesTable.adicionarProcesso(processoExecutando);
+    private void fifo(PCB processoAntigo) {
+		if(processoAntigo != null) {
+			PCB processoExecutando = ProcessesTable.removerProcessoTopo();
+			ProcessesTable.adicionarProcesso(processoExecutando);
+		}
 	}
 
 	// Funções prioridade fixa.

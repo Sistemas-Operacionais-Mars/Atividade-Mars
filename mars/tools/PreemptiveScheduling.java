@@ -15,6 +15,7 @@ import mars.util.SystemIO;
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.RegisterFile;
  
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -50,11 +51,10 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
    private static String heading =  "Escalonamento preemptivo";
    private static String version = " Version 1.0";
    public static boolean canExec = true;
+   private int ultimoPC = 0;
 
-
-   private JComboBox<String> selecaoAlgoritmo;
+   private JComboBox<String> selecaoAlgoritmo = new JComboBox<String>(new String[]{"FIFO","PFixa", "Loteria"});
    private static String algoritmoSelecionado = "FIFO";
-   String[] algoritmosDeEscalonamento = {"FIFO","PFixa", "Loteria"}; // Algoritmos de escalonamento requisitados na tarefa 1.3
 			
     /** 
      * Simple constructor, likely used to run a stand-alone memory reference visualizer.
@@ -100,7 +100,6 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
     /**
      * Number of instructions executed until now.
      */
-	protected int counter = 0;
 	private JTextField counterField;
 	/**
      * Timer definition.
@@ -187,7 +186,14 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		c.gridy = 2;
 		panel.add(timerOn, c);
 
-		panel.add(new JComboBox<String>(algoritmosDeEscalonamento));  // para selecionar qual vai ser
+		selecaoAlgoritmo.setSelectedItem(0);
+		selecaoAlgoritmo.addActionListener (new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				algoritmoSelecionado = selecaoAlgoritmo.getSelectedItem().toString();
+			}
+		});
+
+		panel.add(selecaoAlgoritmo);  // para selecionar qual vai ser
 		// parte dois tarefa 1.3
 		
    		return panel;
@@ -224,18 +230,22 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 	}*/
 	
 	protected void processMIPSUpdate(Observable memory, AccessNotice notice){
+		if(ultimoPC != 0) {
+			RegisterFile.setProgramCounter(ultimoPC);
+			ultimoPC = 0;
+			countInst = -1;
+		}
+
 		if (!notice.accessIsFromMIPS()) return;
 		if (notice.getAccessType() != AccessNotice.READ) return;
 		
 		MemoryAccessNotice m = (MemoryAccessNotice) notice;
 		int a = m.getAddress();
 		if (a == lastAddress) return;
-		
+
 		//Verifica se existe um processo executando
 		if(ProcessesTable.getProcessoExecutando() != null){
 			lastAddress = a;
-			counter++;
-			algoritmoSelecionado = selecaoAlgoritmo.getSelectedItem().toString();
 
 			//Verifica se o timer está contando
 			if(timerOn.isSelected()){
@@ -248,8 +258,10 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 
 					Scheduler scheduler = new Scheduler(algoritmoSelecionado);
 					scheduler.escalonar(false);
-				}	
+					ultimoPC = RegisterFile.getProgramCounter();
+				}
 			}
+
 			updateDisplay();
 		}
 	}
@@ -268,12 +280,11 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		countTimer = 10;
 		countInter = 0;
 		lastAddress = -1;
-		counter = 0;		
 		updateDisplay();
 	}
 //  @Override
 	protected void updateDisplay() {
-		counterField.setText(String.valueOf(counter));
+		counterField.setText(String.valueOf(countInst));
 		counterInterField.setText(String.valueOf(countInter));
 		progressbarInst.setValue(countInst);
 		progressbarInst.setMaximum((int)timerConfig.getValue());

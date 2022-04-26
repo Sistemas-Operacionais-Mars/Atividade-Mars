@@ -5,6 +5,7 @@ import mars.ProgramStatement;
 import mars.mips.SO.ProcessManager.PCB;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.SO.ProcessManager.Scheduler;
+import mars.tools.PreemptiveScheduling;
 
 public class SyscallProcessChange extends AbstractSyscall {
     public SyscallProcessChange() {
@@ -21,7 +22,7 @@ public class SyscallProcessChange extends AbstractSyscall {
         } else {
             processoTopo.copiarRegistradoresParaPCB();
 
-            Scheduler scheduler = new Scheduler("FIFO");
+            Scheduler scheduler = new Scheduler(PreemptiveScheduling.getAlgoritmoSelecionado());
             scheduler.escalonar(false);
         }
     }
