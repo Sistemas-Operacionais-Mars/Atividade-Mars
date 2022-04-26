@@ -20,7 +20,7 @@ public class ProcessesTable {
     }
 
     public static PCB getProcessoTopo() {
-        return listaProcessos.get(0);
+        return listaProcessos.size() == 0 ? null : listaProcessos.get(0);
     }
 
     public static PCB getProcessoExecutando() {

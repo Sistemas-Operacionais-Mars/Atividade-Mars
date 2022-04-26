@@ -53,7 +53,7 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 
 
    private JComboBox<String> selecaoAlgoritmo;
-   private static String algoritmoSelecionado;
+   private static String algoritmoSelecionado = "FIFO";
    String[] algoritmosDeEscalonamento = {"FIFO","PFixa", "Loteria"}; // Algoritmos de escalonamento requisitados na tarefa 1.3
 			
     /** 

@@ -24,16 +24,8 @@ public class Scheduler {
 
     public void escalonar(boolean encerrarProcesso) {
 		if(ProcessesTable.getTamanhoLista() == 0) return;
-
 		PCB processoAntigo = ProcessesTable.getProcessoExecutando();
-		if(processoAntigo != null) {
-			if(encerrarProcesso) ProcessesTable.removerProcesso(processoAntigo);
-			else {
-				processoAntigo.setEstadoProcesso("Pronto");
-				processoAntigo.copiarRegistradoresParaPCB();
-			}
-		}
-
+		
         switch (tipoEscalonamento) {
             case "FIFO": {
 				fifo();
@@ -53,6 +45,14 @@ public class Scheduler {
 			default: System.out.println("Indo parar aqui");
 		}
 
+		if(processoAntigo != null) {
+			if(encerrarProcesso) ProcessesTable.removerProcesso(processoAntigo);
+			else {
+				processoAntigo.setEstadoProcesso("Pronto");
+				processoAntigo.copiarRegistradoresParaPCB();
+			}
+		}
+
 		PCB processoExecutando = ProcessesTable.getProcessoTopo();
 		processoExecutando.setEstadoProcesso("Executando");
         processoExecutando.copiarPCBparaRegistradores();
@@ -61,7 +61,7 @@ public class Scheduler {
 	// Funções FIFO.
     private void fifo() {
 		PCB processoExecutando = ProcessesTable.removerProcessoTopo();
-        ProcessesTable.adicionarProcesso(processoExecutando);
+		ProcessesTable.adicionarProcesso(processoExecutando);
 	}
 
 	// Funções prioridade fixa.
