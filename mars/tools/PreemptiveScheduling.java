@@ -1,6 +1,7 @@
 package mars.tools;
 import javax.swing.*;
 
+import mars.mips.SO.ProcessManager.PCB;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.SO.ProcessManager.Scheduler;
 
@@ -231,7 +232,7 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 	
 	protected void processMIPSUpdate(Observable memory, AccessNotice notice){
 		if(ultimoPC != 0) {
-			RegisterFile.setProgramCounter(ultimoPC);
+			RegisterFile.setProgramCounter(ultimoPC-4);
 			ultimoPC = 0;
 			countInst = -1;
 		}

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
-import mars.mips.hardware.RegisterFile;
-
 public class Scheduler {
 	private String tipoEscalonamento;
 
@@ -47,8 +45,7 @@ public class Scheduler {
 			default: System.out.println("Indo parar aqui");
 		}
 
-		PCB processoExecutando = ProcessesTable.getProcessoTopo();
-		if(processoAntigo != processoExecutando) {
+		if(processoAntigo != null) {
 			if(encerrarProcesso) ProcessesTable.removerProcesso(processoAntigo);
 			else {
 				processoAntigo.setEstadoProcesso("Pronto");
@@ -56,6 +53,7 @@ public class Scheduler {
 			}
 		}
 
+		PCB processoExecutando = ProcessesTable.getProcessoTopo();
 		processoExecutando.setEstadoProcesso("Executando");
         processoExecutando.copiarPCBparaRegistradores();
     }
@@ -63,8 +61,8 @@ public class Scheduler {
 	// Funções FIFO.
     private void fifo(PCB processoAntigo) {
 		if(processoAntigo != null) {
-			PCB processoExecutando = ProcessesTable.removerProcessoTopo();
-			ProcessesTable.adicionarProcesso(processoExecutando);
+			ProcessesTable.removerProcessoTopo();
+			ProcessesTable.adicionarProcesso(processoAntigo);
 		}
 	}
 
