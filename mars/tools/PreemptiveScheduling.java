@@ -1,22 +1,18 @@
 package mars.tools;
 import javax.swing.*;
 
-import mars.mips.SO.ProcessManager.PCB;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.SO.ProcessManager.Scheduler;
 
 import java.awt.*;
 import java.awt.event.*;
-import mars.*;
 import java.util.Observable;
-import mars.util.SystemIO;
 
 
 
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.RegisterFile;
  
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -52,10 +48,9 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
    private static String heading =  "Escalonamento preemptivo";
    private static String version = " Version 1.0";
    public static boolean canExec = true;
-   private int ultimoPC = 0;
 
    private JComboBox<String> selecaoAlgoritmo = new JComboBox<String>(new String[]{"FIFO","PFixa", "Loteria"});
-   private static String algoritmoSelecionado = "FIFO";
+   private static String algoritmoSelecionado = "Loteria";
 			
     /** 
      * Simple constructor, likely used to run a stand-alone memory reference visualizer.
@@ -231,12 +226,6 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 	}*/
 	
 	protected void processMIPSUpdate(Observable memory, AccessNotice notice){
-		if(ultimoPC != 0) {
-			RegisterFile.setProgramCounter(ultimoPC-4);
-			ultimoPC = 0;
-			countInst = -1;
-		}
-
 		if (!notice.accessIsFromMIPS()) return;
 		if (notice.getAccessType() != AccessNotice.READ) return;
 		
@@ -244,27 +233,25 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		int a = m.getAddress();
 		if (a == lastAddress) return;
 
-		//Verifica se existe um processo executando
-		if(ProcessesTable.getProcessoExecutando() != null){
-			lastAddress = a;
+		lastAddress = a;
 
-			//Verifica se o timer está contando
-			if(timerOn.isSelected()){
-				countInst++;
-
-				//Verifica a quantidade de instruções ultrapassou o limite do timer
-				if(countInst > (int)timerConfig.getValue()){
-					countInter++; // incrementa qnt de interrupções
-					countInst = 0; //zera o contador de instruções
-
-					Scheduler scheduler = new Scheduler(algoritmoSelecionado);
-					scheduler.escalonar(false);
-					ultimoPC = RegisterFile.getProgramCounter();
-				}
-			}
-
-			updateDisplay();
+		if(
+			ProcessesTable.getProcessoExecutando() == null || 
+			!timerOn.isSelected()
+		) {
+			return;
 		}
+
+		//Verifica a quantidade de instruções ultrapassou o limite do timer
+		if(++countInst >= (int)timerConfig.getValue()){
+			countInter++; // incrementa qnt de interrupções
+			countInst = 0; //zera o contador de instruções
+
+			Scheduler scheduler = new Scheduler(algoritmoSelecionado);
+			scheduler.escalonar(false);
+		}
+
+		updateDisplay();
 	}
 	
 //  @Override

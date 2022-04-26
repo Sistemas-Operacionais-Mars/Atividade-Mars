@@ -2,6 +2,8 @@ package mars.mips.SO.ProcessManager;
 
 import java.util.List;
 
+import mars.tools.PreemptiveScheduling;
+
 public class Semaphore {
     private int valor;
     private int enderecoSemaforo;
@@ -31,7 +33,7 @@ public class Semaphore {
             processoExecutando.setEstadoProcesso("Bloqueado");
             processosBloqueados.add(processoExecutando);
 
-            Scheduler scheduler = new Scheduler("FIFO");
+            Scheduler scheduler = new Scheduler(PreemptiveScheduling.getAlgoritmoSelecionado());
             scheduler.escalonar(true);
         }
     }

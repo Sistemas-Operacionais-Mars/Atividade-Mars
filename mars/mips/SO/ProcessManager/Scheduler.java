@@ -26,23 +26,25 @@ public class Scheduler {
 		if(ProcessesTable.getTamanhoLista() == 0) return;
 		PCB processoAntigo = ProcessesTable.getProcessoExecutando();
 
-        switch (tipoEscalonamento) {
-            case "FIFO": {
-				fifo(processoAntigo);
-				break;
-			}
-        
-            case "PFixa": {
-				prioridadeFixa();
-				break;
-			}
-		
-			case "Loteria": {
-				loteria();
-				break;
-			}
-				
-			default: System.out.println("Indo parar aqui");
+		if(ProcessesTable.getTamanhoLista() > 1) {
+			switch (tipoEscalonamento) {
+				case "FIFO": {
+					fifo(processoAntigo);
+					break;
+				}
+			
+				case "PFixa": {
+					prioridadeFixa();
+					break;
+				}
+			
+				case "Loteria": {
+					loteria();
+					break;
+				}
+					
+				default: System.out.println("Tipo escolhido inválido");
+			}	
 		}
 
 		if(processoAntigo != null) {
@@ -93,7 +95,7 @@ public class Scheduler {
 				altaPrioridade.add(processo);
 				break;
 			}
-			default: 
+			default: return;
 		}
 	}
 	
