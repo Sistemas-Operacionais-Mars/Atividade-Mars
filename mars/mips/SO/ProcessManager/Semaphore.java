@@ -29,12 +29,16 @@ public class Semaphore {
     public void decrementarValor() {
         if(valor > 0) --valor;
         else {
-            PCB processoExecutando = ProcessesTable.getProcessoTopo();
-            processoExecutando.setEstadoProcesso("Bloqueado");
-            processosBloqueados.add(processoExecutando);
+            PCB processoExecutando = ProcessesTable.getProcessoExecutando();
+            boolean processoExiste = processoExecutando != null;
+
+            if(processoExiste) {
+                processoExecutando.setEstadoProcesso("Bloqueado");
+                processosBloqueados.add(processoExecutando);
+            }
 
             Scheduler scheduler = new Scheduler(PreemptiveScheduling.getAlgoritmoSelecionado());
-            scheduler.escalonar(true);
+            scheduler.escalonar(processoExiste);
         }
     }
 
