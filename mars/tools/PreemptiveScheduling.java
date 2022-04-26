@@ -13,6 +13,7 @@ import java.util.Observable;
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.RegisterFile;
  
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -48,9 +49,10 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
    private static String heading =  "Escalonamento preemptivo";
    private static String version = " Version 1.0";
    public static boolean canExec = true;
+   private int ultimoPC = 0;
 
    private JComboBox<String> selecaoAlgoritmo = new JComboBox<String>(new String[]{"FIFO","PFixa", "Loteria"});
-   private static String algoritmoSelecionado = "FIFO";
+   private static String algoritmoSelecionado = "Loteria";
 			
     /** 
      * Simple constructor, likely used to run a stand-alone memory reference visualizer.
@@ -226,6 +228,11 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 	}*/
 	
 	protected void processMIPSUpdate(Observable memory, AccessNotice notice){
+		if(ultimoPC != 0) {
+			RegisterFile.setProgramCounter(ultimoPC);
+			ultimoPC = 0;
+		}
+
 		if (!notice.accessIsFromMIPS()) return;
 		if (notice.getAccessType() != AccessNotice.READ) return;
 		
@@ -249,6 +256,7 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 
 			Scheduler scheduler = new Scheduler(algoritmoSelecionado);
 			scheduler.escalonar(false);
+			ultimoPC = RegisterFile.getProgramCounter();
 		}
 
 		updateDisplay();

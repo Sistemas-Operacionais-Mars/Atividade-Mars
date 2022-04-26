@@ -26,7 +26,8 @@ public class Scheduler {
 		if(ProcessesTable.getTamanhoLista() == 0) return;
 		PCB processoAntigo = ProcessesTable.getProcessoExecutando();
 
-		if(ProcessesTable.getTamanhoLista() > 1) {
+		boolean unicoElemento = ProcessesTable.getTamanhoLista() == 1;
+		if(!unicoElemento) {
 			switch (tipoEscalonamento) {
 				case "FIFO": {
 					fifo(processoAntigo);
@@ -48,7 +49,8 @@ public class Scheduler {
 		}
 
 		if(processoAntigo != null) {
-			if(encerrarProcesso) ProcessesTable.removerProcesso(processoAntigo);
+			if(encerrarProcesso && !unicoElemento) 
+				ProcessesTable.removerProcesso(processoAntigo);
 			else {
 				processoAntigo.setEstadoProcesso("Pronto");
 				processoAntigo.copiarRegistradoresParaPCB();
