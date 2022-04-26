@@ -50,7 +50,7 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
    public static boolean canExec = true;
 
    private JComboBox<String> selecaoAlgoritmo = new JComboBox<String>(new String[]{"FIFO","PFixa", "Loteria"});
-   private static String algoritmoSelecionado = "Loteria";
+   private static String algoritmoSelecionado = "FIFO";
 			
     /** 
      * Simple constructor, likely used to run a stand-alone memory reference visualizer.

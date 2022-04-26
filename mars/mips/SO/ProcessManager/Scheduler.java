@@ -107,7 +107,7 @@ public class Scheduler {
 		}
 	}
 
-	private PCB obterProcessoPrioritario(Queue<PCB> filaPrioridade, PCB processoTopo) {
+	private PCB obterProcessoPrioritario(Queue<PCB> filaPrioridade) {
 		if(filaPrioridade == null) return null;
 
 		PCB topoPrioridade = filaPrioridade.peek();
@@ -116,15 +116,13 @@ public class Scheduler {
 
 	private void prioridadeFixa() {
 		criarFilasDePrioridade();
-
-		PCB processoTopo = ProcessesTable.getProcessoExecutando();
-		PCB maiorPrioridade = obterProcessoPrioritario(altaPrioridade, processoTopo);
+		PCB maiorPrioridade = obterProcessoPrioritario(altaPrioridade);
 
 		if(maiorPrioridade == null) {
-			maiorPrioridade = obterProcessoPrioritario(mediaPrioridade, processoTopo);
+			maiorPrioridade = obterProcessoPrioritario(mediaPrioridade);
 
 			if(maiorPrioridade == null) {
-				maiorPrioridade = obterProcessoPrioritario(baixaPrioridade, processoTopo);
+				maiorPrioridade = obterProcessoPrioritario(baixaPrioridade);
 			}
 		}
 
