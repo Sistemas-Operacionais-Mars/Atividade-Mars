@@ -51,6 +51,11 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
    private static String version = " Version 1.0";
    public static boolean canExec = true;
 
+
+   private JComboBox selectAlgoritmo;
+   String[] algoritmosDeEscalonamento = {"FIFO","PFixa", "Loteria"}; // Algoritmos de escalonamento requisitados na tarefa 1.3
+			
+
     /** 
      * Simple constructor, likely used to run a stand-alone memory reference visualizer.
      * @param title String containing title for title bar
@@ -134,8 +139,6 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		timerConfig.setModel(new SpinnerNumberModel(10, 2, 100, 1));
 		timerConfig.setToolTipText("Sets the time for the interruption");
 		
-		// Add them to the panel
-		
 		// Fields
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.LINE_START;
@@ -179,6 +182,9 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		c.gridx = 4;
 		c.gridy = 2;
 		panel.add(timerOn, c);
+
+		panel.add(new JComboBox<String>(algoritmosDeEscalonamento));  // para selecionar qual vai ser
+		// parte dois tarefa 1.3
 		
    		return panel;
 	}
@@ -225,6 +231,7 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		if(ProcessesTable.getProcessoTopo() != null){
 			lastAddress = a;
 			counter++;
+			ProcessesTable.setTypeAlgoritmo(selectAlgoritmo.getSelectedItem().toString());
 
 			//Verifica se o timer está contando
 			if(timerOn.isSelected()){
@@ -234,6 +241,8 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 				if(countInst > (int)timerConfig.getValue()){
 					countInter++; // incrementa qnt de interrupções
 					countInst = 0; //zera o contador de instruções
+
+					ProcessesTable.processChange(selectAlgoritmo.getSelectedItem().toString());
 				}	
 			}
 			updateDisplay();
