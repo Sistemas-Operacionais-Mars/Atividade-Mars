@@ -20,7 +20,9 @@ public class SyscallProcessChange extends AbstractSyscall {
             processoTopo.copiarPCBparaRegistradores();
         } else {
             processoTopo.copiarRegistradoresParaPCB();
-            Scheduler.escalonar();
+
+            Scheduler scheduler = new Scheduler("FIFO");
+            scheduler.escalonar(false);
         }
     }
 }

@@ -31,7 +31,8 @@ public class Semaphore {
             processoExecutando.setEstadoProcesso("Bloqueado");
             processosBloqueados.add(processoExecutando);
 
-            Scheduler.escalonar();
+            Scheduler scheduler = new Scheduler("FIFO");
+            scheduler.escalonar(true);
         }
     }
 

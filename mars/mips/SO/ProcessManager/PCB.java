@@ -5,14 +5,16 @@ import java.util.Random;
 public class PCB {
     private int enderecoInicio;
     private int PID;
+    private int prioridade;
     private String estadoProcesso;
     private int[] valorRegistros;
     private static final int numeroDeRegistradores = 34;
 
-    public PCB(int enderecoInicio){
+    public PCB(int enderecoInicio, int prioridade){
         valorRegistros = new int[numeroDeRegistradores];
-        setEnderecoInicio(enderecoInicio);
-        setEstadoProcesso("Pronto");
+        this.enderecoInicio = enderecoInicio;
+        this.prioridade = prioridade;
+        estadoProcesso = "Pronto";
         PID = new Random().nextInt(Integer.MAX_VALUE);
     }
 
@@ -52,7 +54,7 @@ public class PCB {
         return estadoProcesso;
     }
 
-    public void setEstadoProcesso( String estadoProcesso ) {
+    public void setEstadoProcesso(String estadoProcesso) {
         this.estadoProcesso = estadoProcesso;
     }
 
@@ -60,7 +62,7 @@ public class PCB {
         return enderecoInicio;
     }
 
-    public void setEnderecoInicio( int enderecoInicio ) {
+    public void setEnderecoInicio(int enderecoInicio) {
         this.enderecoInicio = enderecoInicio;
     }
 
@@ -68,7 +70,16 @@ public class PCB {
         return PID;
     }
 
-    public void setPID( int PID ) {
+    public void setPID(int PID) {
         this.PID = PID;
     }
+
+    public int getPrioridade() {
+        return prioridade;
+    }
+
+    public void setPrioridade(int prioridade) {
+        this.prioridade = prioridade;
+    }
+
 }

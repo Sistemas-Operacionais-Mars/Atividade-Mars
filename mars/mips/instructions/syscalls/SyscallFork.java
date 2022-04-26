@@ -12,7 +12,6 @@ public class SyscallFork extends AbstractSyscall {
 
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
-        ProcessesTable.criarProcesso(RegisterFile.getValue(4));
+        ProcessesTable.criarProcesso(RegisterFile.getValue(4), RegisterFile.getValue(5));
     }
-    
 }

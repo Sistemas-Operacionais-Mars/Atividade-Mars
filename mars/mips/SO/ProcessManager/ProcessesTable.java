@@ -1,108 +1,58 @@
 package mars.mips.SO.ProcessManager;
-import java.util.LinkedList;
-import java.util.Queue;
-
-import javax.xml.transform.Source;
-
-import mars.mips.SO.*;
-import mars.mips.hardware.RegisterFile;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProcessesTable {
-    private static Queue<PCB> filaProcessos = new LinkedList<PCB>();
+    private static List<PCB> listaProcessos = new ArrayList<PCB>();
 
-    public static Queue<PCB> getProcessListReady() {
-		return filaProcessos;
-	}
-	public static void setProcessListReady(Queue<PCB> processListReady) {
-		ProcessesTable.filaProcessos = processListReady;
-	} 
-    
     public static void adicionarProcesso(PCB processo) {
         processo.setEstadoProcesso("Pronto");
-        filaProcessos.add(processo);
+        listaProcessos.add(processo);
     }
 
-    public static void criarProcesso(int enderecoInicio){
-        PCB novoProcesso = new PCB(enderecoInicio);
+    public static void criarProcesso(int enderecoInicio, int prioridade){
+        PCB novoProcesso = new PCB(enderecoInicio, prioridade);
         adicionarProcesso(novoProcesso);
     }
 
+    public static int getTamanhoLista() {
+        return listaProcessos.size();
+    }
+
     public static PCB getProcessoTopo() {
-        return filaProcessos.peek();
+        return listaProcessos.get(0);
+    }
+
+    public static PCB getProcessoExecutando() {
+        PCB processoTopo = getProcessoTopo();
+
+        if(
+            processoTopo == null || 
+            !processoTopo.getEstadoProcesso().equals("Executando")
+        ) {
+            return null;
+        }
+
+        return processoTopo;
+    }
+
+    public static boolean removerProcesso(PCB processo) {
+        PCB processoTopo = getProcessoTopo();
+
+        if(processo == processoTopo) {
+            removerProcessoTopo();
+            return true;
+        }
+
+        return listaProcessos.remove(processo);
     }
 
     public static PCB removerProcessoTopo() {
-        PCB processoRemovido = filaProcessos.remove();
-
-        if(filaProcessos.size() != 0) {
-            PCB processoTopo = getProcessoTopo();
-            processoTopo.setEstadoProcesso("Executando");
-            processoTopo.copiarPCBparaRegistradores();
-        }
-
+        PCB processoRemovido = listaProcessos.remove(0);
         return processoRemovido;
     }
 
-    public static String algoritmoPadrão = "FIFO"; // default
-
-    
-	public static String getTypeAlgoritmo() {
-		return algoritmoPadrão;
-	}
-
-	public static void setTypeAlgoritmo(String x) {
-		ProcessesTable.algoritmoPadrão = x;
-	}
-
-    private static PCB rodando; // processo rodando
-
-    public static void processChange(String metodo) {
-		
-        if(getProcessoTopo() != null) { // processo sendo executado
-			System.out.println("Salvando");
-			
-			rodando.setEstadoProcesso("ready"); // mudando meu estado
-			rodando.setEnderecoInicio(RegisterFile.getProgramCounter());
-			
-			rodando.copiarRegistradoresParaPCB();  // salvando contexto
-		}
-		
-        switch (metodo) {
-            case "FIFO":
-			
-			if(Scheduler.fifo()) {
-				RegisterFile.setProgramCounter(rodando.getNumeroDeRegistradores());
-				
-				System.out.println("Indo para: " + RegisterFile.getProgramCounter());
-				rodando.copiarPCBparaRegistradores();
-			}
-                break;
-        
-            case "PFixa":    
-            if(Scheduler.fixedPriority()) {
-				for(int i = 0;  i < rodando.getValorRegistros().length; i++) {
-					RegisterFile.updateRegister(i, rodando.getEnderecoInicio());
-				}
-			}
-			if(rodando != null) {
-				RegisterFile.setProgramCounter(rodando.getEnderecoInicio());
-			}
-		
-        case "Loteria": 
-        if(Scheduler.lottery()) {
-            for(int i = 0;  i < rodando.getValorRegistros().length; i++) {
-                RegisterFile.updateRegister(i, rodando.getEnderecoInicio());
-            }
-        }
-        if(rodando != null) {
-            RegisterFile.setProgramCounter(rodando.getEnderecoInicio());
-        }
-            default:
-            System.out.println("indo parar aqui");
-                break;
-         }
+    public static List<PCB> getListaProcessos() {
+        return listaProcessos;
     }
 }
-        
-		
-

@@ -52,10 +52,10 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
    public static boolean canExec = true;
 
 
-   private JComboBox selectAlgoritmo;
+   private JComboBox<String> selecaoAlgoritmo;
+   private static String algoritmoSelecionado;
    String[] algoritmosDeEscalonamento = {"FIFO","PFixa", "Loteria"}; // Algoritmos de escalonamento requisitados na tarefa 1.3
 			
-
     /** 
      * Simple constructor, likely used to run a stand-alone memory reference visualizer.
      * @param title String containing title for title bar
@@ -90,6 +90,10 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
       */
     public String getName() {
       return "Preemptive Scheduling";
+   }
+
+   public static String getAlgoritmoSelecionado() {
+	   return algoritmoSelecionado;
    }
     
 	protected int lastAddress = -1; // comparativo de endereço
@@ -228,10 +232,10 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		if (a == lastAddress) return;
 		
 		//Verifica se existe um processo executando
-		if(ProcessesTable.getProcessoTopo() != null){
+		if(ProcessesTable.getProcessoExecutando() != null){
 			lastAddress = a;
 			counter++;
-			ProcessesTable.setTypeAlgoritmo(selectAlgoritmo.getSelectedItem().toString());
+			algoritmoSelecionado = selecaoAlgoritmo.getSelectedItem().toString();
 
 			//Verifica se o timer está contando
 			if(timerOn.isSelected()){
@@ -242,7 +246,8 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 					countInter++; // incrementa qnt de interrupções
 					countInst = 0; //zera o contador de instruções
 
-					ProcessesTable.processChange(selectAlgoritmo.getSelectedItem().toString());
+					Scheduler scheduler = new Scheduler(algoritmoSelecionado);
+					scheduler.escalonar(false);
 				}	
 			}
 			updateDisplay();

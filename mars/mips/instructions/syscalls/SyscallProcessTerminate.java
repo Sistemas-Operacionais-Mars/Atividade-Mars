@@ -2,7 +2,8 @@ package mars.mips.instructions.syscalls;
 
 import mars.ProcessingException;
 import mars.ProgramStatement;
-import mars.mips.SO.ProcessManager.ProcessesTable;
+import mars.mips.SO.ProcessManager.Scheduler;
+import mars.tools.PreemptiveScheduling;
 
 public class SyscallProcessTerminate extends AbstractSyscall {
     public SyscallProcessTerminate() {
@@ -11,6 +12,7 @@ public class SyscallProcessTerminate extends AbstractSyscall {
 
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
-        ProcessesTable.removerProcessoTopo();
+        Scheduler scheduler = new Scheduler(PreemptiveScheduling.getAlgoritmoSelecionado());
+        scheduler.escalonar(true);
     }
 }
