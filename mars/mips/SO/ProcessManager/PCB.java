@@ -9,6 +9,7 @@ public class PCB {
     private String estadoProcesso;
     private int[] valorRegistros;
     private static final int numeroDeRegistradores = 34;
+    private int registradorLimiteInferior;
 
     public PCB(int enderecoInicio, int prioridade){
         valorRegistros = new int[numeroDeRegistradores];

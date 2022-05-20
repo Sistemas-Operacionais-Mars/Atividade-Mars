@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessesTable {
+    private static int ultimoEnderecoPrograma = 0;
     private static List<PCB> listaProcessos = new ArrayList<PCB>();
 
     public static void adicionarProcesso(PCB processo) {
@@ -54,5 +55,15 @@ public class ProcessesTable {
 
     public static List<PCB> getListaProcessos() {
         return listaProcessos;
+    }
+
+    public static int getUltimoEnderecoPrograma() {
+        return ultimoEnderecoPrograma;
+    }
+
+    public static void setUltimoEnderecoPrograma(
+        int ultimoEnderecoProgramaRecebido
+    ) {
+        ultimoEnderecoPrograma = ultimoEnderecoProgramaRecebido;
     }
 }
