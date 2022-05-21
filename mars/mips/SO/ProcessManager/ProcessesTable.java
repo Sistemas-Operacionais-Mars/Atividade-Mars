@@ -11,8 +11,8 @@ public class ProcessesTable {
         listaProcessos.add(processo);
     }
 
-    public static void criarProcesso(int enderecoInicio, int prioridade){
-        PCB novoProcesso = new PCB(enderecoInicio, prioridade);
+    public static void criarProcesso(int enderecoInicio, int enderecoFim, int prioridade){
+        PCB novoProcesso = new PCB(enderecoInicio, enderecoFim, prioridade);
         adicionarProcesso(novoProcesso);
     }
 

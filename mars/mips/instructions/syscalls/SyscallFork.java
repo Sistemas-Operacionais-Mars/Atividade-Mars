@@ -27,6 +27,6 @@ public class SyscallFork extends AbstractSyscall {
             ProcessesTable.setUltimoEnderecoPrograma(enderecoChamada + distanciaFinal*8);
         }
 
-        ProcessesTable.criarProcesso(RegisterFile.getValue(4), RegisterFile.getValue(5));
+        ProcessesTable.criarProcesso(RegisterFile.getValue(4), RegisterFile.getValue(5), RegisterFile.getValue(6));
     }
 }
