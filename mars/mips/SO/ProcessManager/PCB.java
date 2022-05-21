@@ -4,44 +4,23 @@ import java.util.Random;
 
 public class PCB {
     private int enderecoInicio;
+    private int enderecoFim;
     private int PID;
     private int prioridade;
     private String estadoProcesso;
     private int[] valorRegistros;
     private static final int numeroDeRegistradores = 34;
+
+    //private int regSuperior;
+    //private int regInferior;
     
-    //registradores de limite da memória
-    private int regSuperior;
-    private int regInferior;
-    
-    public PCB(int enderecoInicio, int enderecoFim, int prioridade){
+    public PCB(int enderecoInicio, int prioridade){
         valorRegistros = new int[numeroDeRegistradores];
         this.enderecoInicio = enderecoInicio;
-
-        //atribui valor do endereço inicial ao registrador superior
-        setRegSuperior(enderecoInicio);
-        //atribui valor do endereço final ao registrador inferior
-        setRegInferior(enderecoFim);
 
         this.prioridade = prioridade;
         estadoProcesso = "Pronto";
         PID = new Random().nextInt(Integer.MAX_VALUE);
-    }
-
-    public int getRegSuperior() {
-        return regSuperior;
-    }
-
-    public void setRegSuperior(int regSuperior) {
-        this.regSuperior = regSuperior;
-    }
-
-    public int getRegInferior() {
-        return regInferior;
-    }
-
-    public void setRegInferior(int regInferior) {
-        this.regInferior = regInferior;
     }
 
     public void copiarRegistradoresParaPCB(){
@@ -108,4 +87,11 @@ public class PCB {
         this.prioridade = prioridade;
     }
 
+    public int getEnderecoFim() {
+        return enderecoFim;
+    }
+
+    public void setEnderecoFim(int enderecoFim) {
+        this.enderecoFim = enderecoFim;
+    }
 }

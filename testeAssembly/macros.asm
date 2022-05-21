@@ -18,11 +18,10 @@
 
 #Syscalls criadas no trabalho
 
-.macro SyscallFork(%endereco, %endereco_fim, %prioridade) 
+.macro SyscallFork(%endereco, %prioridade) 
     li $v0,60
     la $a0, %endereco
-    la $a1, %endereco_fim
-    la $a2, %prioridade
+    la $a1, %prioridade
 	syscall
 .end_macro
 

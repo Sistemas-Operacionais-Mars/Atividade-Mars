@@ -4,23 +4,49 @@ import mars.mips.hardware.RegisterFile;
 import mars.util.SystemIO;
 
 public class MemoryManager {
-    public static int tamPagVirtual = 32;//tamanho da página virtual
-    public static int qntMaxBlocos = 4;//quantidade máxima de blocos de alocação por processo
-    public static String algSubstituicao;//NRU, FIFO, SECOND_CHANCE, LRU
+    private static int tamPagVirtual = 32;
+    private static int qntMaxBlocos = 4;
+    private static String algoritmoSubstituicao;
     
-    public static int pc;//variavel que receberá o valor do registrador do program counter
-    public static PCB procExec;//variavel que receberá o pcb em estado "executando" na tabela de processos 
+    public static void verificarMemoria() {
+        int pc = RegisterFile.getProgramCounter();
+        PCB procExec = ProcessesTable.getProcessoExecutando();
 
-    public static void verificarMemoria(){
-        pc = RegisterFile.getProgramCounter();
-        procExec = ProcessesTable.getProcessoExecutando();
-
-        if(procExec.getRegSuperior() > pc) {
-            SystemIO.printString("O endereço do limite superior " + procExec.getRegSuperior() + " está fora da área de acesso!");
-            System.exit(0);//finaliza simulação
-        }else if(procExec.getRegInferior() < pc) {
-            SystemIO.printString("O endereço do limite inferior " + procExec.getRegInferior() + " está fora da área de acesso!");
-            System.exit(0);//finaliza simulação
+        if (
+            procExec.getEnderecoInicio() > pc || 
+            procExec.getEnderecoFim() < pc
+        ) {
+            SystemIO.printString(
+                "Os limites de endereço do processo em execução, que possui limite superior: " + 
+                procExec.getEnderecoInicio() + " e limite inferior: " +
+                procExec.getEnderecoFim() + " estão fora da área de acesso."
+            );
+            SystemIO.printString("Endereço da tentativa de acesso: " + pc);
+            System.exit(0);
         }
+    }
+
+    public static int getTamPagVirtual() {
+        return tamPagVirtual;
+    }
+
+    public static void setTamPagVirtual(int tamPagVirtual) {
+        MemoryManager.tamPagVirtual = tamPagVirtual;
+    }
+
+    public static int getQntMaxBlocos() {
+        return qntMaxBlocos;
+    }
+
+    public static void setQntMaxBlocos(int qntMaxBlocos) {
+        MemoryManager.qntMaxBlocos = qntMaxBlocos;
+    }
+
+    public static String getAlgoritmoSubstituicao() {
+        return algoritmoSubstituicao;
+    }
+
+    public static void setAlgoritmoSubstituicao(String algoritmoSubstituicao) {
+        MemoryManager.algoritmoSubstituicao = algoritmoSubstituicao;
     }
 }

@@ -6,13 +6,21 @@ public class ProcessesTable {
     private static int ultimoEnderecoPrograma = 0;
     private static List<PCB> listaProcessos = new ArrayList<PCB>();
 
-    public static void adicionarProcesso(PCB processo) {
-        processo.setEstadoProcesso("Pronto");
-        listaProcessos.add(processo);
+    public static void adicionarProcesso(PCB novoProcesso) {
+        novoProcesso.setEstadoProcesso("Pronto");
+        novoProcesso.setEnderecoFim(ultimoEnderecoPrograma);
+
+        int tamanhoLista = listaProcessos.size();
+        if(tamanhoLista > 0) {
+            PCB ultimoProcesso = listaProcessos.get(tamanhoLista - 1);
+            ultimoProcesso.setEnderecoFim(novoProcesso.getEnderecoInicio() - 4);
+        }
+        
+        listaProcessos.add(novoProcesso);
     }
 
-    public static void criarProcesso(int enderecoInicio, int enderecoFim, int prioridade){
-        PCB novoProcesso = new PCB(enderecoInicio, enderecoFim, prioridade);
+    public static void criarProcesso(int enderecoInicio, int prioridade){
+        PCB novoProcesso = new PCB(enderecoInicio, prioridade);
         adicionarProcesso(novoProcesso);
     }
 
