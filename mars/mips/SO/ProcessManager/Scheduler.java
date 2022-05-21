@@ -24,7 +24,6 @@ public class Scheduler {
 
     public void escalonar(boolean encerrarProcesso) {
 		if(ProcessesTable.getTamanhoLista() == 0) return;
-		MemoryManager.verificarMemoria();
 		PCB processoAntigo = ProcessesTable.getProcessoExecutando();
 
 		boolean unicoElemento = ProcessesTable.getTamanhoLista() == 1;

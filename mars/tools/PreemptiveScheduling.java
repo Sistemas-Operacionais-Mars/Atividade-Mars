@@ -1,6 +1,8 @@
 package mars.tools;
 import javax.swing.*;
 
+import mars.ProcessingException;
+import mars.mips.SO.ProcessManager.MemoryManager;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.SO.ProcessManager.Scheduler;
 
@@ -227,7 +229,7 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 		}
 	}*/
 	
-	protected void processMIPSUpdate(Observable memory, AccessNotice notice){
+	protected void processMIPSUpdate(Observable memory, AccessNotice notice) {
 		if(ultimoPC != 0) {
 			RegisterFile.setProgramCounter(ultimoPC);
 			ultimoPC = 0;
@@ -249,6 +251,8 @@ public class PreemptiveScheduling extends AbstractMarsToolAndApplication {
 			return;
 		}
 
+		MemoryManager.verificarMemoria();
+		
 		//Verifica a quantidade de instruções ultrapassou o limite do timer
 		if(++countInst >= (int)timerConfig.getValue()){
 			countInter++; // incrementa qnt de interrupções
