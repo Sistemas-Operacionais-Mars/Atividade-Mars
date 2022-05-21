@@ -9,9 +9,10 @@ public class MemoryManager {
     private static String algoritmoSubstituicao;
     
     public static void verificarMemoria() {
-        int pc = RegisterFile.getProgramCounter();
         PCB procExec = ProcessesTable.getProcessoExecutando();
+        if(procExec == null) return;
 
+        int pc = RegisterFile.getProgramCounter();
         if (
             procExec.getEnderecoInicio() > pc || 
             procExec.getEnderecoFim() < pc
@@ -22,6 +23,14 @@ public class MemoryManager {
                 procExec.getEnderecoFim() + " estão fora da área de acesso."
             );
             SystemIO.printString("Endereço da tentativa de acesso: " + pc);
+
+            System.out.println(
+                "Os limites de endereço do processo em execução, que possui limite superior: " + 
+                procExec.getEnderecoInicio() + " e limite inferior: " +
+                procExec.getEnderecoFim() + " estão fora da área de acesso."
+            );
+            System.out.println("Endereço da tentativa de acesso: " + pc);
+
             System.exit(0);
         }
     }

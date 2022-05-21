@@ -60,6 +60,8 @@ public class Scheduler {
 		PCB processoExecutando = ProcessesTable.getProcessoTopo();
 		processoExecutando.setEstadoProcesso("Executando");
         processoExecutando.copiarPCBparaRegistradores();
+
+		ProcessesTable.resetarLimitesInferiores();
     }
 
 	// Funções FIFO.
