@@ -3,8 +3,8 @@ import mars.mips.hardware.RegisterFile;
 import java.util.Random;
 
 public class PCB {
-    private int enderecoInicio;
-    private int enderecoFim;
+    private int enderecoInicio = 0;
+    private int enderecoFim = 0;
     private int PID;
     private int prioridade;
     private String estadoProcesso;

@@ -1,8 +1,13 @@
 package mars.mips.SO.memory;
 
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
 import mars.mips.SO.ProcessManager.PCB;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.hardware.RegisterFile;
+import mars.simulator.Simulator;
 import mars.util.SystemIO;
 
 public class MemoryManager {
@@ -22,7 +27,7 @@ public class MemoryManager {
             SystemIO.printString(
                 "Os limites de endereço do processo em execução, que possui limite superior: " + 
                 procExec.getEnderecoInicio() + " e limite inferior: " +
-                procExec.getEnderecoFim() + " estão fora da área de acesso."
+                procExec.getEnderecoFim() + " estão fora da área de acesso.\n"
             );
             SystemIO.printString("Endereço da tentativa de acesso: " + pc);
 
@@ -33,7 +38,11 @@ public class MemoryManager {
             );
             System.out.println("Endereço da tentativa de acesso: " + pc);
 
-            System.exit(0);
+            Simulator.getInstance().stopExecution(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                }
+            });
         }
     }
 

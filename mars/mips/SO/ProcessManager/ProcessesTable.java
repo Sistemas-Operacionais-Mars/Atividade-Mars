@@ -7,27 +7,29 @@ public class ProcessesTable {
     private static List<PCB> listaProcessos = new ArrayList<PCB>();
 
     public static void adicionarProcesso(PCB novoProcesso) {
-        novoProcesso.setEstadoProcesso("Pronto");        
+        novoProcesso.setEstadoProcesso("Pronto");
+        
+        if(novoProcesso.getEnderecoFim() == 0) {
+            novoProcesso.setEnderecoFim(ultimoEnderecoPrograma);
+        }
+
+        int tamanhoLista = listaProcessos.size();
+        if(tamanhoLista > 0) {
+            PCB penultimoProcesso = listaProcessos.get(tamanhoLista - 1);
+
+            if(penultimoProcesso.getEnderecoFim() == 0) {
+                penultimoProcesso.setEnderecoFim(
+                    novoProcesso.getEnderecoInicio() - 4
+                );
+            }
+        }
+        
         listaProcessos.add(novoProcesso);
-        resetarLimitesInferiores();
     }
 
     public static void criarProcesso(int enderecoInicio, int prioridade){
         PCB novoProcesso = new PCB(enderecoInicio, prioridade);
         adicionarProcesso(novoProcesso);
-    }
-
-    public static void resetarLimitesInferiores() {
-        int tamanhoLista = getTamanhoLista();
-
-        for(int ind=0 ; ind<tamanhoLista ; ind++) {
-            PCB processoIterado = listaProcessos.get(ind);
-
-            if(ind+1 != tamanhoLista) {
-                PCB proximoProcesso = listaProcessos.get(ind+1);
-                processoIterado.setEnderecoFim(proximoProcesso.getEnderecoInicio());
-            } else processoIterado.setEnderecoFim(ultimoEnderecoPrograma);
-        }
     }
 
     public static int getTamanhoLista() {
