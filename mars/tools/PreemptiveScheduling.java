@@ -2,9 +2,9 @@ package mars.tools;
 import javax.swing.*;
 
 import mars.ProcessingException;
-import mars.mips.SO.ProcessManager.MemoryManager;
 import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.SO.ProcessManager.Scheduler;
+import mars.mips.SO.memory.*;
 
 import java.awt.*;
 import java.awt.event.*;

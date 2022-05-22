@@ -1,5 +1,7 @@
-package mars.mips.SO.ProcessManager;
+package mars.mips.SO.memory;
 
+import mars.mips.SO.ProcessManager.PCB;
+import mars.mips.SO.ProcessManager.ProcessesTable;
 import mars.mips.hardware.RegisterFile;
 import mars.util.SystemIO;
 
