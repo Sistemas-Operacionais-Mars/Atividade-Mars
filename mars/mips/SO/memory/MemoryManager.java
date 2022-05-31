@@ -11,8 +11,8 @@ import mars.simulator.Simulator;
 import mars.util.SystemIO;
 
 public class MemoryManager {
-    private static int tamPagVirtual = 32;
-    private static int qntMaxBlocos = 4;
+    private static int tamPagVirtual; //4kb,8kb,16kb,32kb
+    private static int qntMaxBlocos;  
     private static String algoritmoSubstituicao;
     
     public static void verificarMemoria() {
