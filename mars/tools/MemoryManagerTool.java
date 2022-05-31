@@ -177,13 +177,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   
   private JPanel buildSelectPainel() {
 	 Vector<Integer> tamPg = new Vector<Integer>();
-	  tamPg.add(new Integer(2));
 	  tamPg.add(new Integer(4));
 	  tamPg.add(new Integer(8));
 	  tamPg.add(new Integer(16));
-	  // sizes.add(new Integer(32));
+	  tamPg.add(new Integer(32));
+	  tamPg.add(new Integer(64));
 
 	  Vector<Integer> qtdBloc = new Vector<Integer>();
+	  qtdBloc.add(new Integer(2));
 	  qtdBloc.add(new Integer(4));
 	  qtdBloc.add(new Integer(8));
 	  qtdBloc.add(new Integer(16));
