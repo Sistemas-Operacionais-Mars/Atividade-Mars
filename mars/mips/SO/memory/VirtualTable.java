@@ -11,6 +11,23 @@ public class VirtualTable {
     // um objeto "tabela virtual" para cada processo ou 1 único objeto que reserve uma 
     // quantidade fixa de "entradas da tabela" para cada processo
     
-    private static List<VirtualTableEntry> tabelaVirtual = new ArrayList<VirtualTableEntry>();
+    private static List<VirtualTableEntry> entradasTabela = new ArrayList<VirtualTableEntry>();
 	private static int[] memory = new int[MemoryManager.getTamPagVirtual()];
+    
+    
+    //getters e setters
+    public static List<VirtualTableEntry> getEntradasTabela() {
+        return entradasTabela;
+    }
+    public static void setEntradasTabela(List<VirtualTableEntry> entradasTabela) {
+        VirtualTable.entradasTabela = entradasTabela;
+    }
+    
+    public static int[] getMemory() {
+        return memory;
+    }
+    public static void setMemory(int[] memory) {
+        VirtualTable.memory = memory;
+    }
+    
 }
