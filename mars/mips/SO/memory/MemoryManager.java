@@ -31,7 +31,7 @@ public class MemoryManager {
         if(procExec == null) return;
 
         int pc = RegisterFile.getProgramCounter();
-        if ( procExec.getEnderecoInicio() > pc || procExec.getEnderecoFim() < pc ){
+        if (procExec.getEnderecoInicio() > pc || procExec.getEnderecoFim() < pc){
             SystemIO.printString(
                 "Os limites de endereço do processo em execução, que possui limite superior: " + 
                 procExec.getEnderecoInicio() + " e limite inferior: " +
@@ -51,7 +51,7 @@ public class MemoryManager {
                 public void actionPerformed(ActionEvent arg0) {
                 }
             });
-        }else{
+        } else {
             /*A MMU deve verificar os campos “índice” 
             e “deslocamento” do endereço virtual para 
             mapeá-lo para endereço físico, para isso 

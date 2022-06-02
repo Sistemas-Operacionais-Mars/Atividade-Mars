@@ -58,12 +58,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 
 	 JTextArea JLog;
 
-	 
 	 public static JComboBox<Integer> qtdPaginaMemVirtual;
 	 public static JComboBox<Integer> tamPagina;
 	 public static JComboBox<Integer> qtdMolduraMemFisica;
 	 public static JComboBox<String> metodoPaginacao;
-
+	 public static JButton botaoConfirmar;
 
 	 private static String heading =  "Memory Manager";
 	 private static String version = " Version 1.0";
@@ -175,26 +174,33 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		 return painel;
 	   }
   
+  private void disableAllInputs() {
+	tamPagina.setEnabled(false);
+	metodoPaginacao.setEnabled(false);
+   	qtdPaginaMemVirtual.setEnabled(false);
+   	qtdMolduraMemFisica.setEnabled(false);
+  }
+
   private JPanel buildSelectPainel() {
 	 Vector<Integer> tamPg = new Vector<Integer>();
-	  tamPg.add(new Integer(4));
-	  tamPg.add(new Integer(8));
-	  tamPg.add(new Integer(16));
-	  tamPg.add(new Integer(32));
-	  tamPg.add(new Integer(64));
+	  tamPg.add(4);
+	  tamPg.add(8);
+	  tamPg.add(16);
+	  tamPg.add(32);
+	  tamPg.add(64);
 
 	  Vector<Integer> qtdBloc = new Vector<Integer>();
-	  qtdBloc.add(new Integer(4));
-	  qtdBloc.add(new Integer(8));
-	  qtdBloc.add(new Integer(16));
-	  qtdBloc.add(new Integer(32));
+	  qtdBloc.add(4);
+	  qtdBloc.add(8);
+	  qtdBloc.add(16);
+	  qtdBloc.add(32);
 
 	  //deve ser apagado
 	  Vector<Integer> qtdMemFis = new Vector<Integer>();
-	  qtdMemFis.add(new Integer(2));
-	  qtdMemFis.add(new Integer(4));
-	  qtdMemFis.add(new Integer(8));
-	  qtdMemFis.add(new Integer(12));
+	  qtdMemFis.add(2);
+	  qtdMemFis.add(4);
+	  qtdMemFis.add(8);
+	  qtdMemFis.add(12);
 	  //----------------------
 	  
 	  Vector<String> metodos = new Vector<String>();
@@ -209,11 +215,19 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 qtdPaginaMemVirtual.setSelectedIndex(2);
 	 qtdMolduraMemFisica = new JComboBox<Integer>(qtdMemFis);
 	 tamPagina = new JComboBox<Integer>(tamPg);
+	 botaoConfirmar = new JButton("Confirmar configurações");
+
+	 botaoConfirmar.addActionListener(new ActionListener() { 
+		public void actionPerformed(ActionEvent e) { 
+			disableAllInputs();
+		} 
+	  } );
 	  
 	  metodoPaginacao.setAlignmentX(CENTER_ALIGNMENT);
 	  qtdPaginaMemVirtual.setAlignmentX(CENTER_ALIGNMENT);
 	  qtdMolduraMemFisica.setAlignmentX(CENTER_ALIGNMENT);
-	  tamPagina.setAlignmentX(CENTER_ALIGNMENT);	
+	  tamPagina.setAlignmentX(CENTER_ALIGNMENT);
+	  botaoConfirmar.setAlignmentX(CENTER_ALIGNMENT);	
 	  
 	  JPanel panel = new JPanel();
 	  JPanel outerPanel = new JPanel();
@@ -246,6 +260,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  panel.add(new JLabel("Método paginação"), c);
 	  c.gridy++;
 	  panel.add(metodoPaginacao, c);
+
+	  c.gridy++;
+	  panel.add(botaoConfirmar, c);
 
 	  outerPanel.add(panel, BorderLayout.NORTH);
 	  return outerPanel;

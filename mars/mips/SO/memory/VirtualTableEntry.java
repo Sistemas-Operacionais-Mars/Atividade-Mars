@@ -1,7 +1,6 @@
 package mars.mips.SO.memory;
 
 public class VirtualTableEntry {
-    
     //Criar uma classe "entrada da tabela virtual" com, no mínimo, os atributos:
     // Página Referenciada, Página Modificada, Proteção (bits R, W e X), bit Presente/ausente
     // e Número da moldura mapeada
@@ -15,7 +14,7 @@ public class VirtualTableEntry {
     Afinal, a meta do mapeamento de páginas é localizar 
     esse valor.
     */
-    int numMoldura;
+    int numMolduraMapeada;
 
     //------------------------------------------------------
     // bits que verificam se está referenciada ou modificada 
@@ -30,7 +29,7 @@ public class VirtualTableEntry {
     tendo em vista que a cópia em disco ainda é válida. 
     O bit às vezes é chamado de bit sujo, já que ele 
     reflete o estado da página.*/ 
-    boolean modifiedPage;     
+    boolean paginaModificada;     
 
     /* 
     O bit Referenciada é configurado sempre que uma 
@@ -42,7 +41,7 @@ public class VirtualTableEntry {
     estão sendo, e esse bit desempenha um papel importante 
     em vários dos algoritmos de substituição de páginas
     */
-    boolean referencedPage;
+    boolean paginaReferenciada;
         
     //------------------------------------------------------
     // bits de proteção
@@ -60,23 +59,32 @@ public class VirtualTableEntry {
     /*Se esse bit for 1, a entrada é válida e pode ser usada. 
     Se ele for 0, a página virtual à qual a entrada pertence 
     não está atualmente na memória*/
-    boolean PresentAway;
+    boolean paginaPresente;
+
+    public VirtualTableEntry(
+        int numMolduraMapeada, boolean paginaModificada,
+        boolean paginaReferenciada
+    ) {
+        this.numMolduraMapeada = numMolduraMapeada;
+        this.paginaModificada = paginaModificada;
+        this.paginaReferenciada = paginaReferenciada;
+    }
 
     //getters and setters
-    public boolean getReferencedPage() {
-        return referencedPage;
+    public boolean getPaginaReferenciada() {
+        return paginaReferenciada;
     }
 
-    public void setReferencedPage(boolean referencedPage) {
-        this.referencedPage = referencedPage;
+    public void setPaginaReferenciada(boolean paginaReferenciada) {
+        this.paginaReferenciada = paginaReferenciada;
     }
 
-    public boolean getModifiedPage() {
-        return modifiedPage;
+    public boolean getPaginaModificada() {
+        return paginaModificada;
     }
 
-    public void setModifiedPage(boolean modifiedPage) {
-        this.modifiedPage = modifiedPage;
+    public void setPaginaModificada(boolean paginaModificada) {
+        this.paginaModificada = paginaModificada;
     }
 
     public boolean getR() {
@@ -103,20 +111,20 @@ public class VirtualTableEntry {
         this.x = x;
     }
 
-    public boolean isPresentAway() {
-        return PresentAway;
+    public boolean getPaginaPresente() {
+        return paginaPresente;
     }
 
-    public void setPresentAway(boolean presentAway) {
-        PresentAway = presentAway;
+    public void setPaginaPresente(boolean paginaPresente) {
+        this.paginaPresente = paginaPresente;
     }
 
-    public int getNumMoldura() {
-        return numMoldura;
+    public int getNumMolduraMapeada() {
+        return numMolduraMapeada;
     }
 
-    public void setNumMoldura(int numMoldura) {
-        this.numMoldura = numMoldura;
+    public void setNumMolduraMapeada(int numMolduraMapeada) {
+        this.numMolduraMapeada = numMolduraMapeada;
     }
 
 }
