@@ -11,8 +11,19 @@ import mars.simulator.Simulator;
 import mars.util.SystemIO;
 
 public class MemoryManager {
-    private static int tamPagVirtual; //4kb,8kb,16kb,32kb
-    private static int qntMaxBlocos;  
+    /*Foram utilizados valores padrões encontrados 
+    no livro de Tanenbaum para os possíveis tamanhos 
+    de página. A de 4kb é uma das mais usadas no mercado*/
+    private static int tamPagVirtual; //4kb, 8kb, 16kb, 32kb, 64kb
+
+    //-----------------------------------------    
+    /*Quantidade máxima de molduras na memória física.
+    A quantidade de molduras também pode ser entendida 
+    como a quantidade máxima de páginas virtuais mapeadas 
+    permitida.*/
+    private static int qntMaxBlocos; // 4kb, 8kb, 16kb, 32kb 
+    
+    //-----------------------------------------
     private static String algoritmoSubstituicao;
     
     public static void verificarMemoria() {

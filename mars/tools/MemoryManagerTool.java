@@ -184,17 +184,18 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  tamPg.add(new Integer(64));
 
 	  Vector<Integer> qtdBloc = new Vector<Integer>();
-	  qtdBloc.add(new Integer(2));
 	  qtdBloc.add(new Integer(4));
 	  qtdBloc.add(new Integer(8));
 	  qtdBloc.add(new Integer(16));
 	  qtdBloc.add(new Integer(32));
 
+	  //deve ser apagado
 	  Vector<Integer> qtdMemFis = new Vector<Integer>();
 	  qtdMemFis.add(new Integer(2));
 	  qtdMemFis.add(new Integer(4));
 	  qtdMemFis.add(new Integer(8));
 	  qtdMemFis.add(new Integer(12));
+	  //----------------------
 	  
 	  Vector<String> metodos = new Vector<String>();
 	  metodos.add("NRU");

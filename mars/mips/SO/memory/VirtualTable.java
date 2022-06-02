@@ -12,7 +12,12 @@ public class VirtualTable {
     // quantidade fixa de "entradas da tabela" para cada processo
     
     private static List<VirtualTableEntry> entradasTabela = new ArrayList<VirtualTableEntry>();
-	private static int[] memory = new int[MemoryManager.getTamPagVirtual()];
+	
+    //---------------------------------------------------
+    /*vetor limitado que representa a memória física. 
+    Utiliza a variável qntMaximaBlocos para definir 
+    a quantidade de molduras na memória.*/ 
+    private static int[] memoriaFisica = new int[MemoryManager.getQntMaxBlocos()];
     
     
     //getters e setters
@@ -23,11 +28,11 @@ public class VirtualTable {
         VirtualTable.entradasTabela = entradasTabela;
     }
     
-    public static int[] getMemory() {
-        return memory;
+    public static int[] getMemoriaFisica() {
+        return memoriaFisica;
     }
-    public static void setMemory(int[] memory) {
-        VirtualTable.memory = memory;
+    public static void setMemoriaFisica(int[] memoriaFisica) {
+        VirtualTable.memoriaFisica = memoriaFisica;
     }
     
 }
