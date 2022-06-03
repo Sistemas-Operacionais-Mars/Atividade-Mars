@@ -12,12 +12,12 @@ public class VirtualTable {
     //---------------------------------------------------
     /*vetor limitado que representa a memória física. 
     Utiliza a variável qntMaximaBlocos para definir 
-    a quantidade de molduras na memória.*/ 
+    a quantidade de molduras na memória.*/
     private List<Integer> memoriaFisica;
 
     public VirtualTable(int quantidadeMaximaBlocos) {
         memoriaFisica = new ArrayList<>(quantidadeMaximaBlocos);
-        tabelaEntradas = new ArrayList<>(quantidadeMaximaBlocos);
+        tabelaEntradas = new ArrayList<>();
     }
 
     private VirtualTableEntry obterElementoFIFO() {
@@ -88,11 +88,11 @@ public class VirtualTable {
     public void adicionarElementoMemoria(int memoria, int memoriaVirtual) {
         int tamanhoMemoriaFisica = memoriaFisica.size();
 
-        VirtualTableEntry novaEntrada = new VirtualTableEntry(
-            memoriaVirtual, false, false
-        );
-
         if(tamanhoMemoriaFisica == MemoryManager.getQntMaxBlocos()) {
+            VirtualTableEntry novaEntrada = new VirtualTableEntry(
+                memoriaVirtual, false, false
+            );
+
             VirtualTableEntry elementoParaSubstituir = obterElementoParaSubstituir();
             int memoriaFisicaEncontrada = MemoryManagementUnit.traduzirParaEnderecoFisico(
                 elementoParaSubstituir.getNumMolduraMapeada()
@@ -100,10 +100,7 @@ public class VirtualTable {
             
             memoriaFisica.remove(memoriaFisicaEncontrada);
             tabelaEntradas.remove(elementoParaSubstituir);
-        }
-        
-        memoriaFisica.add(memoria);
-        tabelaEntradas.add(novaEntrada);
+        } else memoriaFisica.add(memoria);
     }
 
     public void adicionarElementoTabela(VirtualTableEntry elemento) {
