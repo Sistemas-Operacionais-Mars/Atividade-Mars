@@ -21,7 +21,7 @@ public class MemoryManager {
     A quantidade de molduras também pode ser entendida 
     como a quantidade máxima de páginas virtuais mapeadas 
     permitida.*/
-    private static int qntMaxBlocos; // 4kb, 8kb, 16kb, 32kb 
+    private static int qntMaxBlocos; // 4, 8, 16, 32 
     
     //-----------------------------------------
     private static String algoritmoSubstituicao;
@@ -62,7 +62,6 @@ public class MemoryManager {
             /*Primeiro atribui o endereço atual 
             armazenado no pc para o endereço virtual*/
             String enderecoVirtual = Integer.toBinaryString(pc);
-            
         }
     }
 

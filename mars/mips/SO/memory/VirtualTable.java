@@ -15,12 +15,10 @@ public class VirtualTable {
     a quantidade de molduras na memória.*/ 
     private static int[] memoriaFisica = new int[MemoryManager.getQntMaxBlocos()];
     
-    //Para o método FIFO
     public static VirtualTableEntry obterElementoFIFO() {
         return entradasTabela.get(0);
     }
 
-    //Para o método NRU
     public static VirtualTableEntry obterElementoNRU() {
         List<VirtualTableEntry> tabelaProvisoria = new ArrayList<>();
         tabelaProvisoria.addAll(entradasTabela);
@@ -43,8 +41,6 @@ public class VirtualTable {
         return tabelaProvisoria.get(0);
     }
 
-
-    //Para o método da Segunda Chance
     public static VirtualTableEntry obterElementoSegundaChance() {
         VirtualTableEntry elementoIterativo = obterElementoFIFO();
 
@@ -57,7 +53,6 @@ public class VirtualTable {
         return elementoIterativo;
     }
 
-    //Para o método LRU
     public static VirtualTableEntry obterElementoLRU() {
         List<VirtualTableEntry> tabelaProvisoria = new ArrayList<>();
         tabelaProvisoria.addAll(entradasTabela);
