@@ -192,6 +192,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	MemoryManager.setQntMaxBlocos(
 		Integer.valueOf(qtdPaginaMemVirtual.getSelectedItem().toString())
 	);
+	MemoryManager.inicializarTabelaVirtual();
   }
 
   private void handleOnClickConfirm() {
@@ -355,7 +356,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			lastAdress = a;
 			
 			MemoryManager.verificarMemoria();
-			int tamanhoTabelaEntradas = VirtualTable.getTabelaEntradas().size();
+			VirtualTable tabelaVirtual = MemoryManager.tabelaVirtual;
+			int tamanhoTabelaEntradas = tabelaVirtual.getTabelaEntradas().size();
 
 			if(tamanhoAnteriorTabela != tamanhoTabelaEntradas) {
 				table.removeAll();
@@ -364,7 +366,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 					String dados[] = new String[2];
 					dados[0] = String.valueOf(ind);
 					dados[1] = String.valueOf(
-						VirtualTable.getTabelaEntradas().get(0).getNumMolduraMapeada()
+						tabelaVirtual.getTabelaEntradas().get(0).getNumMolduraMapeada()
 					);
 
 					updateDisplay(dados);

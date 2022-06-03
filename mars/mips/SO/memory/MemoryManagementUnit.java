@@ -1,7 +1,7 @@
 package mars.mips.SO.memory;
 
 public class MemoryManagementUnit {
-    private int traduzirParaEnderecoFisico() {
+    public static int traduzirParaEnderecoFisico(int enderecoVirtual) {
         return 0;
     }
 }

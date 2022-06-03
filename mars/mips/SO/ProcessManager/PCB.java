@@ -1,5 +1,4 @@
 package mars.mips.SO.ProcessManager;
-import mars.mips.SO.memory.VirtualTable;
 import mars.mips.hardware.RegisterFile;
 import java.util.Random;
 
@@ -10,7 +9,6 @@ public class PCB {
     private int prioridade;
     private String estadoProcesso;
     private int[] valorRegistros;
-    private VirtualTable tabelaVirtual;
     private static final int numeroDeRegistradores = 34;
     
     public PCB(int enderecoInicio, int prioridade){
@@ -20,7 +18,6 @@ public class PCB {
         this.prioridade = prioridade;
         estadoProcesso = "Pronto";
         PID = new Random().nextInt(Integer.MAX_VALUE);
-        tabelaVirtual = new VirtualTable();
     }
 
     public void copiarRegistradoresParaPCB(){
@@ -85,14 +82,6 @@ public class PCB {
 
     public void setPrioridade(int prioridade) {
         this.prioridade = prioridade;
-    }
-
-    public VirtualTable getTabelaVirtual() {
-        return tabelaVirtual;
-    }
-
-    public void setTabelaVirtual(VirtualTable tabelaVirtual) {
-        this.tabelaVirtual = tabelaVirtual;
     }
 
     public int getEnderecoFim() {
