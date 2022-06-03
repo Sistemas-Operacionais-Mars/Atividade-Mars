@@ -1,5 +1,7 @@
 package mars.mips.SO.memory;
 
+import java.util.Date;
+
 public class VirtualTableEntry {
     //Criar uma classe "entrada da tabela virtual" com, no mínimo, os atributos:
     // Página Referenciada, Página Modificada, Proteção (bits R, W e X), bit Presente/ausente
@@ -14,7 +16,7 @@ public class VirtualTableEntry {
     Afinal, a meta do mapeamento de páginas é localizar 
     esse valor.
     */
-    int numMolduraMapeada;
+    private int numMolduraMapeada;
 
     //------------------------------------------------------
     // bits que verificam se está referenciada ou modificada 
@@ -29,7 +31,7 @@ public class VirtualTableEntry {
     tendo em vista que a cópia em disco ainda é válida. 
     O bit às vezes é chamado de bit sujo, já que ele 
     reflete o estado da página.*/ 
-    boolean paginaModificada;     
+    private boolean paginaModificada;     
 
     /* 
     O bit Referenciada é configurado sempre que uma 
@@ -41,7 +43,7 @@ public class VirtualTableEntry {
     estão sendo, e esse bit desempenha um papel importante 
     em vários dos algoritmos de substituição de páginas
     */
-    boolean paginaReferenciada;
+    private boolean paginaReferenciada;
         
     //------------------------------------------------------
     // bits de proteção
@@ -50,16 +52,17 @@ public class VirtualTableEntry {
     1 bit, com 0 para ler/escrever e 1 para ler somente. 
     Um arranjo mais sofisticado é ter 3 bits, para 
     habilitar a leitura, escrita e execução da página*/  
-    boolean r;
-    boolean w; 
-    boolean x;
+    private boolean r;
+    private boolean w; 
+    private boolean x;
 
     //------------------------------------------------------
     // presente/ausente
     /*Se esse bit for 1, a entrada é válida e pode ser usada. 
     Se ele for 0, a página virtual à qual a entrada pertence 
     não está atualmente na memória*/
-    boolean paginaPresente;
+    private boolean paginaPresente;
+    private Date ultimaUtilizacao;
 
     public VirtualTableEntry(
         int numMolduraMapeada, boolean paginaModificada,
@@ -68,9 +71,9 @@ public class VirtualTableEntry {
         this.numMolduraMapeada = numMolduraMapeada;
         this.paginaModificada = paginaModificada;
         this.paginaReferenciada = paginaReferenciada;
+        ultimaUtilizacao = new Date();
     }
 
-    //getters and setters
     public boolean getPaginaReferenciada() {
         return paginaReferenciada;
     }
@@ -117,6 +120,7 @@ public class VirtualTableEntry {
 
     public void setPaginaPresente(boolean paginaPresente) {
         this.paginaPresente = paginaPresente;
+        if(paginaPresente) ultimaUtilizacao = new Date();
     }
 
     public int getNumMolduraMapeada() {
@@ -127,4 +131,7 @@ public class VirtualTableEntry {
         this.numMolduraMapeada = numMolduraMapeada;
     }
 
+    public Date getUltimaUtilizacao() {
+        return ultimaUtilizacao;
+    }
 }

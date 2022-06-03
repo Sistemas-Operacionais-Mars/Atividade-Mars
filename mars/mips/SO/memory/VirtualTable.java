@@ -1,6 +1,9 @@
 package mars.mips.SO.memory;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class VirtualTable {    
@@ -12,6 +15,66 @@ public class VirtualTable {
     a quantidade de molduras na memória.*/ 
     private static int[] memoriaFisica = new int[MemoryManager.getQntMaxBlocos()];
     
+    //Para o método FIFO
+    public static VirtualTableEntry obterElementoFIFO() {
+        return entradasTabela.get(0);
+    }
+
+    //Para o método NRU
+    public static VirtualTableEntry obterElementoNRU() {
+        List<VirtualTableEntry> tabelaProvisoria = new ArrayList<>();
+        tabelaProvisoria.addAll(entradasTabela);
+
+        Collections.sort(tabelaProvisoria, new Comparator<VirtualTableEntry>() {
+            @Override
+            public int compare(VirtualTableEntry left, VirtualTableEntry right) {
+                int leftValue = (left.getPaginaReferenciada() ? 1 : 0) + 
+                (left.getPaginaModificada() ? 1 : 0);
+
+                int rightValue = (right.getPaginaReferenciada() ? 1 : 0) + 
+                (right.getPaginaModificada() ? 1 : 0);
+
+                if(leftValue == rightValue) return 0;
+                if(leftValue < rightValue) return -1;
+                return 1;
+            }
+        });
+
+        return tabelaProvisoria.get(0);
+    }
+
+
+    //Para o método da Segunda Chance
+    public static VirtualTableEntry obterElementoSegundaChance() {
+        VirtualTableEntry elementoIterativo = obterElementoFIFO();
+
+        while(elementoIterativo.getPaginaReferenciada()) {
+            entradasTabela.remove(elementoIterativo);
+            entradasTabela.add(elementoIterativo);
+            elementoIterativo = obterElementoFIFO();
+        }
+
+        return elementoIterativo;
+    }
+
+    //Para o método LRU
+    public static VirtualTableEntry obterElementoLRU() {
+        List<VirtualTableEntry> tabelaProvisoria = new ArrayList<>();
+        tabelaProvisoria.addAll(entradasTabela);
+
+        Collections.sort(tabelaProvisoria, new Comparator<VirtualTableEntry>() {
+            @Override
+            public int compare(VirtualTableEntry left, VirtualTableEntry right) {
+                Date leftValue = left.getUltimaUtilizacao();
+                Date rightValue = right.getUltimaUtilizacao();
+
+                return leftValue.compareTo(rightValue);
+            }
+        });
+
+        return tabelaProvisoria.get(0);
+    }
+
     public static List<VirtualTableEntry> getEntradasTabela() {
         return entradasTabela;
     }

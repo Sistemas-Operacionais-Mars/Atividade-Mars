@@ -25,7 +25,7 @@ public class MemoryManager {
     
     //-----------------------------------------
     private static String algoritmoSubstituicao;
-    
+
     public static void verificarMemoria() {
         PCB procExec = ProcessesTable.getProcessoExecutando();
         if(procExec == null) return;
