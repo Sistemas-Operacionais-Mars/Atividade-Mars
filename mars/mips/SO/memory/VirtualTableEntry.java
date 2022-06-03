@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class VirtualTableEntry {
     private int numMolduraMapeada;
-    private boolean paginaModificada;     
+    private boolean paginaModificada = false;     
     private boolean paginaReferenciada;
  
     private boolean r;
@@ -15,12 +15,12 @@ public class VirtualTableEntry {
     private Date ultimaUtilizacao;
 
     public VirtualTableEntry(
-        int numMolduraMapeada, boolean paginaModificada,
-        boolean paginaReferenciada
+        int numMolduraMapeada, boolean paginaReferenciada,
+        boolean paginaPresente
     ) {
         this.numMolduraMapeada = numMolduraMapeada;
-        this.paginaModificada = paginaModificada;
         this.paginaReferenciada = paginaReferenciada;
+        this.paginaPresente = paginaPresente;
         ultimaUtilizacao = new Date();
     }
 

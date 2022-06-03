@@ -57,6 +57,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 public static JTextField TempoAcessoDisco;
 	 
 	 JTextArea JLog;
+	 private static int tamanhoAnteriorTabela = 0;
 
 	 public static JComboBox<Integer> qtdPaginaMemVirtual;
 	 public static JComboBox<Integer> tamPagina;
@@ -181,6 +182,23 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	qtdMolduraMemFisica.setEnabled(false);
   }
 
+  private void setMemoryManagerData() {
+	MemoryManager.setAlgoritmoSubstituicao(
+		metodoPaginacao.getSelectedItem().toString()
+	);
+	MemoryManager.setTamPagVirtual(
+		Integer.valueOf(tamPagina.getSelectedItem().toString())
+	);
+	MemoryManager.setQntMaxBlocos(
+		Integer.valueOf(qtdPaginaMemVirtual.getSelectedItem().toString())
+	);
+  }
+
+  private void handleOnClickConfirm() {
+	disableAllInputs();
+	setMemoryManagerData();
+  } 
+
   private JPanel buildSelectPainel() {
 	 Vector<Integer> tamPg = new Vector<Integer>();
 	  tamPg.add(4);
@@ -219,7 +237,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 	 botaoConfirmar.addActionListener(new ActionListener() { 
 		public void actionPerformed(ActionEvent e) { 
-			disableAllInputs();
+			handleOnClickConfirm();
 		} 
 	  } );
 	  
@@ -317,26 +335,44 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  return outerPanel;
   }
   
-	   public static void updateDisplay(String[] dados) {    	  
-		   ((DefaultTableModel)table.getModel()).addRow(dados);          
-	   } 
-	   public static void updateDisplay(int indexRemove) {   
-			((DefaultTableModel)table.getModel()).removeRow(indexRemove);      	   
-		 }
-		public static void updateDisplay(String dados, int index) {   
-			((DefaultTableModel)table.getModel()).setValueAt(dados, index, 1);    	   
-		 }
-		
-		protected void processMIPSUpdate(Observable memory, AccessNotice notice) {
-			if (notice.getAccessType() != AccessNotice.READ) return;
-			 MemoryAccessNotice m = (MemoryAccessNotice) notice;
-			 int a = m.getAddress();
-			 if (a == lastAdress) return;
-			 lastAdress = a;
-			 //MemoryManager.VerificarMemoria(lastAdress);			
-		 }
-		
-		protected void addAsObserver() {
-			addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
-		}
+	public static void updateDisplay(String[] dados) {    	  
+		((DefaultTableModel)table.getModel()).addRow(dados);          
 	}
+
+	public static void updateDisplay(int indexRemove) {   
+		((DefaultTableModel)table.getModel()).removeRow(indexRemove);      	   
+	}
+
+	public static void updateDisplay(String dados, int index) {   
+		((DefaultTableModel)table.getModel()).setValueAt(dados, index, 1);    	   
+	}
+		
+	protected void processMIPSUpdate(Observable memory, AccessNotice notice) {
+		if (notice.getAccessType() != AccessNotice.READ) return;
+			MemoryAccessNotice m = (MemoryAccessNotice) notice;
+			int a = m.getAddress();
+			if (a == lastAdress) return;
+			lastAdress = a;
+			
+			MemoryManager.verificarMemoria();
+			int tamanhoTabelaEntradas = VirtualTable.getTabelaEntradas().size();
+
+			if(tamanhoAnteriorTabela != tamanhoTabelaEntradas) {
+				table.removeAll();
+				
+				for(int ind=0 ; ind<tamanhoTabelaEntradas ; ind++) {
+					String dados[] = new String[2];
+					dados[0] = String.valueOf(ind);
+					dados[1] = String.valueOf(
+						VirtualTable.getTabelaEntradas().get(0).getNumMolduraMapeada()
+					);
+
+					updateDisplay(dados);
+				}
+			}		
+	}
+		
+	protected void addAsObserver() {
+		addAsObserver(Memory.textBaseAddress, Memory.textLimitAddress);
+	}
+}

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public class VirtualTable {    
-    private static List<VirtualTableEntry> entradasTabela = new ArrayList<VirtualTableEntry>();
+    private static List<VirtualTableEntry> tabelaEntradas = new ArrayList<VirtualTableEntry>();
 	
     //---------------------------------------------------
     /*vetor limitado que representa a memória física. 
@@ -16,12 +16,12 @@ public class VirtualTable {
     private static int[] memoriaFisica = new int[MemoryManager.getQntMaxBlocos()];
     
     public static VirtualTableEntry obterElementoFIFO() {
-        return entradasTabela.get(0);
+        return tabelaEntradas.get(0);
     }
 
     public static VirtualTableEntry obterElementoNRU() {
         List<VirtualTableEntry> tabelaProvisoria = new ArrayList<>();
-        tabelaProvisoria.addAll(entradasTabela);
+        tabelaProvisoria.addAll(tabelaEntradas);
 
         Collections.sort(tabelaProvisoria, new Comparator<VirtualTableEntry>() {
             @Override
@@ -45,8 +45,8 @@ public class VirtualTable {
         VirtualTableEntry elementoIterativo = obterElementoFIFO();
 
         while(elementoIterativo.getPaginaReferenciada()) {
-            entradasTabela.remove(elementoIterativo);
-            entradasTabela.add(elementoIterativo);
+            tabelaEntradas.remove(elementoIterativo);
+            tabelaEntradas.add(elementoIterativo);
             elementoIterativo = obterElementoFIFO();
         }
 
@@ -55,7 +55,7 @@ public class VirtualTable {
 
     public static VirtualTableEntry obterElementoLRU() {
         List<VirtualTableEntry> tabelaProvisoria = new ArrayList<>();
-        tabelaProvisoria.addAll(entradasTabela);
+        tabelaProvisoria.addAll(tabelaEntradas);
 
         Collections.sort(tabelaProvisoria, new Comparator<VirtualTableEntry>() {
             @Override
@@ -70,12 +70,20 @@ public class VirtualTable {
         return tabelaProvisoria.get(0);
     }
 
-    public static List<VirtualTableEntry> getEntradasTabela() {
-        return entradasTabela;
+    public static void adicionarElementoTabela(VirtualTableEntry elemento) {
+        tabelaEntradas.add(elemento);
     }
 
-    public static void setEntradasTabela(List<VirtualTableEntry> entradasTabela) {
-        VirtualTable.entradasTabela = entradasTabela;
+    public static void removerElementoTabela(VirtualTableEntry elemento) {
+        tabelaEntradas.remove(elemento);
+    }
+
+    public static List<VirtualTableEntry> getTabelaEntradas() {
+        return tabelaEntradas;
+    }
+
+    public static void setTabelaEntradas(List<VirtualTableEntry> tabelaEntradas) {
+        VirtualTable.tabelaEntradas = tabelaEntradas;
     }
     
     public static int[] getMemoriaFisica() {
