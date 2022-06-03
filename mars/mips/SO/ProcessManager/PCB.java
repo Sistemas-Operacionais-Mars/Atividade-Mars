@@ -4,17 +4,14 @@ import mars.mips.hardware.RegisterFile;
 import java.util.Random;
 
 public class PCB {
-    private int enderecoInicio = 0;
-    private int enderecoFim = 0;
+    private int enderecoInicio = 0;  // regSuperior;
+    private int enderecoFim = 0;    // regInferior;
     private int PID;
     private int prioridade;
     private String estadoProcesso;
     private int[] valorRegistros;
     private VirtualTable tabelaVirtual;
     private static final int numeroDeRegistradores = 34;
-
-    //private int regSuperior;
-    //private int regInferior;
     
     public PCB(int enderecoInicio, int prioridade){
         valorRegistros = new int[numeroDeRegistradores];
