@@ -2,6 +2,9 @@ package mars.mips.SO.ProcessManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import mars.mips.SO.memory.MemoryManager;
+import mars.mips.SO.memory.VirtualTable;
+
 public class ProcessesTable {
     private static int ultimoEnderecoPrograma = 0;
     private static List<PCB> listaProcessos = new ArrayList<PCB>();
@@ -28,7 +31,10 @@ public class ProcessesTable {
     }
 
     public static void criarProcesso(int enderecoInicio, int prioridade){
-        PCB novoProcesso = new PCB(enderecoInicio, prioridade);
+        PCB novoProcesso = new PCB(
+            enderecoInicio, prioridade, 
+            new VirtualTable(MemoryManager.getQntMaxBlocos())
+        );
         adicionarProcesso(novoProcesso);
     }
 

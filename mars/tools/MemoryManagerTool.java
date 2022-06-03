@@ -3,20 +3,19 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import mars.ProcessingException;
+import mars.mips.SO.ProcessManager.PCB;
 import mars.mips.SO.ProcessManager.ProcessesTable;
-import mars.mips.SO.ProcessManager.Scheduler;
 import mars.mips.SO.memory.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
 
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.RegisterFile;
  
 /*
 Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
@@ -57,7 +56,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 public static JTextField TempoAcessoDisco;
 	 
 	 JTextArea JLog;
-	 private static int tamanhoAnteriorTabela = 0;
 
 	 public static JComboBox<Integer> qtdPaginaMemVirtual;
 	 public static JComboBox<Integer> tamPagina;
@@ -192,7 +190,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	MemoryManager.setQntMaxBlocos(
 		Integer.valueOf(qtdPaginaMemVirtual.getSelectedItem().toString())
 	);
-	MemoryManager.inicializarTabelaVirtual();
   }
 
   private void handleOnClickConfirm() {
@@ -356,22 +353,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			lastAdress = a;
 			
 			MemoryManager.verificarMemoria();
-			VirtualTable tabelaVirtual = MemoryManager.tabelaVirtual;
-			int tamanhoTabelaEntradas = tabelaVirtual.getTabelaEntradas().size();
+			table.removeAll();
 
-			if(tamanhoAnteriorTabela != tamanhoTabelaEntradas) {
-				table.removeAll();
-				
-				for(int ind=0 ; ind<tamanhoTabelaEntradas ; ind++) {
+			for(PCB processo : ProcessesTable.getListaProcessos()) {
+				List<VirtualTableEntry> tabelaEntradas = processo.getTabelaVirtual().getTabelaEntradas();
+
+				for(int ind=0 ; ind<tabelaEntradas.size() ; ind++) {
 					String dados[] = new String[2];
 					dados[0] = String.valueOf(ind);
 					dados[1] = String.valueOf(
-						tabelaVirtual.getTabelaEntradas().get(0).getNumMolduraMapeada()
+						tabelaEntradas.get(ind).getNumMolduraMapeada()
 					);
 
 					updateDisplay(dados);
 				}
-			}		
+			}
 	}
 		
 	protected void addAsObserver() {

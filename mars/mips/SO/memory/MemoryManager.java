@@ -1,12 +1,6 @@
 package mars.mips.SO.memory;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
 import javax.swing.AbstractAction;
 
 import mars.mips.SO.ProcessManager.PCB;
@@ -19,110 +13,17 @@ public class MemoryManager {
     /*Foram utilizados valores padrões encontrados 
     no livro de Tanenbaum para os possíveis tamanhos 
     de página. A de 4kb é uma das mais usadas no mercado*/
-    private static int tamPagVirtual; //4kb, 8kb, 16kb, 32kb, 64kb
+    private static int tamPagVirtual = 4; //4kb, 8kb, 16kb, 32kb, 64kb
 
     //-----------------------------------------    
     /*Quantidade máxima de molduras na memória física.
     A quantidade de molduras também pode ser entendida 
     como a quantidade máxima de páginas virtuais mapeadas 
     permitida.*/
-    private static int qntMaxBlocos; // 4, 8, 16, 32
+    private static int qntMaxBlocos = 16; // 4, 8, 16, 32
     
     //-----------------------------------------
-    private static String algoritmoSubstituicao;
-    public static VirtualTable tabelaVirtual;
-    
-    public static void inicializarTabelaVirtual() {
-        tabelaVirtual = new VirtualTable(qntMaxBlocos);
-    }
-
-    private static VirtualTableEntry obterElementoFIFO() {
-        return tabelaVirtual.getTabelaEntradas().get(0);
-    }
-
-    private static VirtualTableEntry obterElementoNRU() {
-        List<VirtualTableEntry> tabelaProvisoria = new ArrayList<>();
-        tabelaProvisoria.addAll(tabelaVirtual.getTabelaEntradas());
-
-        Collections.sort(tabelaProvisoria, new Comparator<VirtualTableEntry>() {
-            @Override
-            public int compare(VirtualTableEntry left, VirtualTableEntry right) {
-                int leftValue = (left.getPaginaReferenciada() ? 1 : 0) + 
-                (left.getPaginaModificada() ? 1 : 0);
-
-                int rightValue = (right.getPaginaReferenciada() ? 1 : 0) + 
-                (right.getPaginaModificada() ? 1 : 0);
-
-                if(leftValue == rightValue) return 0;
-                if(leftValue < rightValue) return -1;
-                return 1;
-            }
-        });
-
-        return tabelaProvisoria.get(0);
-    }
-
-    private static VirtualTableEntry obterElementoSegundaChance() {
-        VirtualTableEntry elementoIterativo = obterElementoFIFO();
-
-        while(elementoIterativo.getPaginaReferenciada()) {
-            tabelaVirtual.getTabelaEntradas().remove(elementoIterativo);
-            tabelaVirtual.getTabelaEntradas().add(elementoIterativo);
-            elementoIterativo = obterElementoFIFO();
-        }
-
-        return elementoIterativo;
-    }
-
-    private static VirtualTableEntry obterElementoLRU() {
-        List<VirtualTableEntry> tabelaProvisoria = new ArrayList<>();
-        tabelaProvisoria.addAll(tabelaVirtual.getTabelaEntradas());
-
-        Collections.sort(tabelaProvisoria, new Comparator<VirtualTableEntry>() {
-            @Override
-            public int compare(VirtualTableEntry left, VirtualTableEntry right) {
-                Date leftValue = left.getUltimaUtilizacao();
-                Date rightValue = right.getUltimaUtilizacao();
-
-                return leftValue.compareTo(rightValue);
-            }
-        });
-
-        return tabelaProvisoria.get(0);
-    }
-
-    private static VirtualTableEntry obterElementoParaSubstituir() {
-        switch(algoritmoSubstituicao) {
-            case "NRU": return obterElementoNRU();
-            case "FIFO": return obterElementoFIFO();
-            case "Segunda Chance": return obterElementoSegundaChance();
-            case "LRU": return obterElementoLRU();
-            default: return obterElementoFIFO();
-        }
-    } 
-
-    private static void adicionarElementoMemoria(int memoria, int memoriaVirtual) {
-        List<VirtualTableEntry> tabelaEntradas = tabelaVirtual.getTabelaEntradas();
-        List<Integer> memoriaFisica = tabelaVirtual.getMemoriaFisica();
-        int tamanhoMemoriaFisica = memoriaFisica.size();
-
-        VirtualTableEntry novaEntrada = new VirtualTableEntry(
-            memoriaVirtual, false, false
-        );
-
-        if(tamanhoMemoriaFisica == qntMaxBlocos) {
-            VirtualTableEntry elementoParaSubstituir = obterElementoParaSubstituir();
-            int memoriaFisicaEncontrada = MemoryManagementUnit.traduzirParaEnderecoFisico(
-                elementoParaSubstituir.getNumMolduraMapeada()
-            );
-            
-            memoriaFisica.remove(memoriaFisicaEncontrada);
-            tabelaEntradas.remove(elementoParaSubstituir);
-        }
-        
-        memoriaFisica.add(memoria);
-        tabelaEntradas.add(novaEntrada);
-    }
+    private static String algoritmoSubstituicao = "FIFO";
 
     public static void verificarMemoria() {
         PCB procExec = ProcessesTable.getProcessoExecutando();
@@ -160,7 +61,9 @@ public class MemoryManager {
             /*Primeiro atribui o endereço atual 
             armazenado no pc para o endereço virtual*/
             String enderecoVirtual = Integer.toBinaryString(pc);
-            adicionarElementoMemoria(pc, Integer.valueOf(enderecoVirtual));            
+            procExec.getTabelaVirtual().adicionarElementoMemoria(
+                pc, Integer.valueOf(enderecoVirtual)
+            );
         }
     }
 
