@@ -149,6 +149,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		  table.getColumnModel().getColumn(1).setPreferredWidth(92);
 		  scrollPane.setViewportView(table);	
 		  
+
+
 		  hitMissMessage = new JTextArea();
 		  hitMissMessage.setEditable(false);
 		  hitMissMessage.setLineWrap(true);
@@ -343,11 +345,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 				for(int ind=0 ; ind<tabelaEntradas.size() ; ind++) {
 					String dados[] = new String[2];
-					dados[0] = String.valueOf(ind);
+					//dados[0] = String.valueOf(ind);
+					dados[0] = "LEIVA";
+
+					/*
 					dados[1] = String.valueOf(
 						tabelaEntradas.get(ind).getNumMolduraMapeada()
 					);
-
+ 					*/
+					dados[1] = "CASEMIRO";
 					updateDisplay(dados);
 				}
 			}
