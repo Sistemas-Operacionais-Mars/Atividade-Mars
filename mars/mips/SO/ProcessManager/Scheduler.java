@@ -30,7 +30,6 @@ public class Scheduler {
 
 		boolean unicoElemento = ProcessesTable.getTamanhoLista() == 1;
 		if(!unicoElemento) {
-			RegisterFile.setProgramCounter(processoAntigo.getEnderecoInicio());
 			switch (tipoEscalonamento) {
 				case "FIFO": {
 					fifo(processoAntigo);
