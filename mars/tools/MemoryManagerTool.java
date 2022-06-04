@@ -57,7 +57,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	 
 	 JTextArea JLog;
 
-	 public static JComboBox<Integer> qtdPaginaMemVirtual;
 	 public static JComboBox<Integer> tamPagina;
 	 public static JComboBox<Integer> qtdMolduraMemFisica;
 	 public static JComboBox<String> metodoPaginacao;
@@ -176,7 +175,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   private void disableAllInputs() {
 	tamPagina.setEnabled(false);
 	metodoPaginacao.setEnabled(false);
-   	qtdPaginaMemVirtual.setEnabled(false);
    	qtdMolduraMemFisica.setEnabled(false);
   }
 
@@ -188,7 +186,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 		Integer.valueOf(tamPagina.getSelectedItem().toString())
 	);
 	MemoryManager.setQntMaxBlocos(
-		Integer.valueOf(qtdPaginaMemVirtual.getSelectedItem().toString())
+		Integer.valueOf(qtdMolduraMemFisica.getSelectedItem().toString())
 	);
   }
 
@@ -211,14 +209,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  qtdBloc.add(16);
 	  qtdBloc.add(32);
 
-	  //deve ser apagado
-	  Vector<Integer> qtdMemFis = new Vector<Integer>();
-	  qtdMemFis.add(2);
-	  qtdMemFis.add(4);
-	  qtdMemFis.add(8);
-	  qtdMemFis.add(12);
-	  //----------------------
-	  
 	  Vector<String> metodos = new Vector<String>();
 	  metodos.add("NRU");
 	  metodos.add("FIFO");
@@ -227,9 +217,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  
 	  metodoPaginacao = new JComboBox<String>(metodos);
 	  metodoPaginacao.setSelectedIndex(1);
-	 qtdPaginaMemVirtual = new JComboBox<Integer>(qtdBloc);
-	 qtdPaginaMemVirtual.setSelectedIndex(2);
-	 qtdMolduraMemFisica = new JComboBox<Integer>(qtdMemFis);
+	 qtdMolduraMemFisica = new JComboBox<Integer>(qtdBloc);
 	 tamPagina = new JComboBox<Integer>(tamPg);
 	 botaoConfirmar = new JButton("Confirmar configurações");
 
@@ -240,7 +228,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  } );
 	  
 	  metodoPaginacao.setAlignmentX(CENTER_ALIGNMENT);
-	  qtdPaginaMemVirtual.setAlignmentX(CENTER_ALIGNMENT);
 	  qtdMolduraMemFisica.setAlignmentX(CENTER_ALIGNMENT);
 	  tamPagina.setAlignmentX(CENTER_ALIGNMENT);
 	  botaoConfirmar.setAlignmentX(CENTER_ALIGNMENT);	
@@ -257,11 +244,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	  c.insets = new Insets(5, 5, 2, 5);
 	  c.gridx = 1;
 	  c.gridy = 1;
-
-	  panel.add(new JLabel("Qt. Paginas"), c);
-	  c.gridy++;
-	  panel.add(qtdPaginaMemVirtual, c);
-	  
+ 
 	  c.gridy++;
 	  panel.add(new JLabel("Tamanho da página"), c);
 	  c.gridy++;

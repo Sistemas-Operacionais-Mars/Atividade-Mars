@@ -38,12 +38,12 @@ public class MemoryManager {
             );
             SystemIO.printString("Endereço da tentativa de acesso: " + pc);
 
-            System.out.println(
+            /*System.out.println(
                 "Os limites de endereço do processo em execução, que possui limite superior: " + 
                 procExec.getEnderecoInicio() + " e limite inferior: " +
                 procExec.getEnderecoFim() + " estão fora da área de acesso."
             );
-            System.out.println("Endereço da tentativa de acesso: " + pc);
+            System.out.println("Endereço da tentativa de acesso: " + pc);*/
 
             Simulator.getInstance().stopExecution(new AbstractAction() {
                 @Override
