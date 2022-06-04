@@ -60,10 +60,10 @@ public class MemoryManager {
 
             /*Primeiro atribui o endereço atual 
             armazenado no pc para o endereço virtual*/
-            String enderecoVirtual = Integer.toBinaryString(pc);
-            procExec.getTabelaVirtual().adicionarElementoMemoria(
-                pc, Integer.valueOf(enderecoVirtual.substring(0, 4))
-            );
+            // String enderecoVirtual = Integer.toBinaryString(pc);
+            // procExec.getTabelaVirtual().adicionarElementoMemoria(
+            //     pc, Integer.valueOf(enderecoVirtual.substring(0, 4))
+            // );
         }
     }
 

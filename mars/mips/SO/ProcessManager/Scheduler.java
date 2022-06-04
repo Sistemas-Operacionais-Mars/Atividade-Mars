@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
-import mars.mips.hardware.RegisterFile;
-
 public class Scheduler {
 	private String tipoEscalonamento;
 
@@ -30,7 +28,6 @@ public class Scheduler {
 
 		boolean unicoElemento = ProcessesTable.getTamanhoLista() == 1;
 		if(!unicoElemento) {
-			RegisterFile.setProgramCounter(processoAntigo.getEnderecoInicio());
 			switch (tipoEscalonamento) {
 				case "FIFO": {
 					fifo(processoAntigo);
